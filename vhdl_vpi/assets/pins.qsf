@@ -1,0 +1,18 @@
+# IN
+set_location_assignment PIN_C10 -to clk #sw0
+set_location_assignment PIN_C11 -to enable #sw1
+set_location_assignment PIN_D12 -to reset #sw2
+set_location_assignment PIN_C12 -to A[3] #sw3
+set_location_assignment PIN_A12 -to A[2] #sw4
+set_location_assignment PIN_B12 -to A[1] #sw5
+set_location_assignment PIN_A13 -to A[0] #sw6
+
+# OUT
+set_location_assignment PIN_D13 -to cout[3] #LEDR[4]
+set_location_assignment PIN_C13 -to cout[2] #LEDR[5]
+set_location_assignment PIN_E14 -to cout[1] #LEDR[6]
+set_location_assignment PIN_D14 -to cout[0] #LEDR[7]
+
+set_location_assignment PIN_C14 -to cout[0] #HEX0[0]
+set_location_assignment PIN_C18 -to cout[1] #HEX1[0]
+set_location_assignment PIN_D18 -to cout[2] #HEX1[1]

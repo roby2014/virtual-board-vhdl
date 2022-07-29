@@ -1,0 +1,4 @@
+v 4
+file . "assets/app.vhdl" "b1ca8bbbc463f03a9be7cf3cd396a57567b9427f" "20220729133829.642":
+  entity up_counter at 1( 0) + 0 on 15;
+  architecture rtl of up_counter at 14( 267) + 0 on 16;
