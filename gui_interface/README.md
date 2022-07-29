@@ -1,5 +1,8 @@
 # DE10-Lite emulator interface
 
+## Current Status
+<img src="https://github.com/roby2014/de10-emulator/blob/main/gui_interface/git_assets/prev.png />
+
 ## Building from source 
 ## 1. Install the Prerequisites
 
