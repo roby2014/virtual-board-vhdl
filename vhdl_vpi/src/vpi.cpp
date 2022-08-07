@@ -54,7 +54,7 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     // qsf_parser parser("assets/pins.qsf");
     // get_io_signals(*vb, parser.parse());
 
-    register_cb_after(cb_init, CLK_SPEED, vb);
+    // register_cb_after(cb_init, CLK_SPEED, vb);
     return 0;
 }
 
