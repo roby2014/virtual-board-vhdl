@@ -3,3 +3,4 @@
 [Bb]uild/
 build_*/
 .DS_Store
+*.cf

@@ -7,10 +7,11 @@ SRC += src/main.cpp
 SRC += src/vpi.cpp
 SRC += src/qsf_parser.cpp
 SRC += src/virtual_board.cpp
+SRC += src/board_config.cpp
 SRC += src/utils.cpp
 
 CFLAGS  += -Isrc -O2 -std=c++2a -fPIC -W -Wall -Wno-write-strings -Wno-missing-field-initializers 
-LDFLAGS += -lm
+LDFLAGS += -lm -lconfig++
 GHDL     = ghdl
 CXX      = g++
 GHDLLD   = $(GHDL) --vpi-link $(CXX)
