@@ -1,4 +1,5 @@
 #include "vpi.hpp"
+#include "board_config.hpp"
 #include "qsf_parser.hpp"
 #include "virtual_board.hpp"
 #include "vpi_user.h"
@@ -48,8 +49,10 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     vpi_printf("-------------------------------------------------\n");
 
     virtual_board* vb = new virtual_board();
-    qsf_parser parser("assets/pins.qsf");
-    get_io_signals(*vb, parser.parse());
+
+    board_config::get_board_config();
+    // qsf_parser parser("assets/pins.qsf");
+    // get_io_signals(*vb, parser.parse());
 
     register_cb_after(cb_init, CLK_SPEED, vb);
     return 0;
