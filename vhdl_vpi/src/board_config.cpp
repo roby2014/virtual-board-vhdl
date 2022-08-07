@@ -8,7 +8,7 @@ bool get_board_config() {
     libconfig::Config cfg;
 
     try {
-        cfg.readFile("board.cfg");
+        cfg.readFile("assets/board.cfg");
     } catch (const libconfig::FileIOException& fioex) {
         fprintf(stderr, "I/O error while reading file. \n");
         return false;
