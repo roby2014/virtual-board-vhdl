@@ -3,7 +3,25 @@ To compile and run the VPI plugin, you will need a recent version of `g++`, `GHD
 
 If you want to test other VHDL code, you have to change `VHDL_FILES` and `EXEC_TOP_UNIT` inside the Makefile.
 
-I have tested with:
+
+# Configuration
+## FPGA board configuration
+This emulator allows having a custom PIN set, to add your desired pins, edit `assets/board.cfg`.
+Each pin should have a `pin_name`, `pin_id` and its `index`.
+For now, only `leds`, `switches`, (`hex` and `buttons` in the future) are allowed.
+
+## Assignments
+To assign your top entity VHDL signals to board PINS, edit `assets/assignments.cfg`.
+The configuration should look pretty obvious if you open the file, but just in case, this is how it's done:
+```
+// PIN_ID -> SIGNAL
+
+PIN_A8 -> enable
+PIN_A9 -> COUT
+```
+
+# Test and run
+I have only tested this project on these platforms:
 
 ## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
 Compile and run:

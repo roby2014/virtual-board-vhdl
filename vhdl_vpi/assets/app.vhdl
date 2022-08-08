@@ -5,7 +5,7 @@ USE ieee.std_logic_unsigned.ALL;
 ENTITY up_counter IS
     PORT (
         cout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-        enable : IN STD_LOGIC;
+        enable : IN STD_LOGIC := '1';
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC
     );
