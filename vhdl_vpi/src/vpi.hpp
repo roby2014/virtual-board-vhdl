@@ -2,11 +2,17 @@
 #define VPI_HPP
 
 #include "assignments_cfg/parser.hpp"
+#include "pin_set.hpp"
 #include "virtual_board.hpp"
 #include "vpi_user.h"
 #include <vector>
 
 #define CLK_SPEED 1
+
+// compiler things..
+class virtual_board;
+class pin_set;
+struct pin;
 
 /// VPI related functions/wrappers
 namespace vpi {
