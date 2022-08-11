@@ -1,5 +1,5 @@
 # VPI module
-To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL` and `libconfig++-dev`.
+To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL`, `libconfig++-dev` and `libboost-dev`.
 
 If you want to test other VHDL code, you have to change `VHDL_FILES` and `EXEC_TOP_UNIT` inside the Makefile.
 
@@ -53,17 +53,16 @@ Written by Tristan Gingold.
 ```
 
 ```
-$ apt-cache policy libconfig++-dev
-libconfig++-dev:
-  Installed: 1.5-0.4build1
-  Candidate: 1.5-0.4build1
-  Version table:
- *** 1.5-0.4build1 500
-        500 http://archive.ubuntu.com/ubuntu focal/universe amd64 Packages
-        100 /var/lib/dpkg/status
+$ dpkg -s libconfig++-dev | grep 'Version'
+Version: 1.5-0.4build1
 ```
 
-## Windows 10:
+```
+$ dpkg -s libboost-dev | grep 'Version'
+Version: 1.71.0.0ubuntu2
+```
+
+## Windows 10 (not fully tested yet!):
 (mingw64 needed)
 
 Compile and run:

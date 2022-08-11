@@ -4,10 +4,12 @@
 #include "board_config.hpp"
 #include "virtual_board.hpp"
 #include "vpi_user.h"
+#include "websocket_server.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <thread>
 #include <unistd.h>
 
 #define DEBUG
@@ -92,6 +94,9 @@ PLI_INT32 cb_simulation_end(p_cb_data cb_data __attribute__((unused))) {
 
 PLI_INT32 cb_init(p_cb_data cb_data) {
     virtual_board* vb = (virtual_board*)cb_data->user_data;
+
+    std::thread(ws_sv::open_ws_server, vb).detach(); // open websocket server in a separate thread
+
     static int startup_cnt = 0;
 
     switch (startup_cnt) {

@@ -6,7 +6,11 @@
 
 /// Some general utilities
 namespace utils {
-// returns [str] in lower case
+
+/// splits [s] into tokens, depending on [delim]
+std::vector<std::string> split(const std::string& s, char delim);
+
+/// returns [str] in lower case
 std::string to_lower(const std::string& str);
 
 /// returns net's name (in lower case) and index case any
