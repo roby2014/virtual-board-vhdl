@@ -4,4 +4,5 @@
 build_*/
 .DS_Store
 *.cf
-src/*.ghc
+*.gch
+src/*.gch
