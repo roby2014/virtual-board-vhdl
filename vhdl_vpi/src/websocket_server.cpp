@@ -1,9 +1,19 @@
-#include "websocket_server.hpp"
-#include "board_config.hpp"
-#include "pch.hpp"
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <string>
+#include <thread>
+#include <vector>
+
+#include <boost/algorithm/string.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+
 #include "pin.hpp"
 #include "utils.hpp"
 #include "virtual_board.hpp"
+#include "websocket_server.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>

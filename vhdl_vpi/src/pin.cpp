@@ -1,5 +1,6 @@
 #include "pin.hpp"
 #include "vpi.hpp"
+#include <algorithm>
 
 /// returns signal's bit value at index
 int pin::get_value() const {

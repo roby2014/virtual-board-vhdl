@@ -3,6 +3,7 @@
 
 #include "lexer.hpp"
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
