@@ -7,7 +7,7 @@
 namespace ws_sv {
 
 void open_ws_server(virtual_board* vb) {
-    printf("Opening Websocket server...\n");
+    printf("Opening Websocket server... (127.0.0.1:8083)\n");
     try {
         // TODO: no hardcoded values
         auto const address = net::ip::make_address("127.0.0.1");

@@ -1,7 +1,7 @@
 #ifndef WEBSOCKET_SERVER_HPP
 #define WEBSOCKET_SERVER_HPP
 
-#include "pch.h"
+#include "pch.hpp"
 #include "virtual_board.hpp"
 
 namespace ws_sv {
