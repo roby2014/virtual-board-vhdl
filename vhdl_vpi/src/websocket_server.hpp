@@ -1,10 +1,8 @@
 #ifndef WEBSOCKET_SERVER_HPP
 #define WEBSOCKET_SERVER_HPP
 
+#include "pch.h"
 #include "virtual_board.hpp"
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
 
 namespace ws_sv {
 

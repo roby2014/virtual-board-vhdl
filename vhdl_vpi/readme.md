@@ -25,6 +25,13 @@ PIN_A8 -> enable
 PIN_A9 -> COUT
 ```
 
+## Websocket server
+Communication protocol:
+```
+GET <PIN_ID> - returns pin's signal value (1/0)
+PUT <PIN_ID> <VALUE> - puts pin's signal value to value
+```
+
 # Test and run
 I have only tested this project on these platforms:
 
