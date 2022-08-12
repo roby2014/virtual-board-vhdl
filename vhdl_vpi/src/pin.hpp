@@ -1,8 +1,8 @@
 #ifndef PIN_HPP
 #define PIN_HPP
 
-#include "vpi_user.h"
 #include <string>
+#include "vpi_user.h"
 
 /// Represents a pin
 struct pin {

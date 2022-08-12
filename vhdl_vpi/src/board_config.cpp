@@ -1,7 +1,7 @@
-#include "board_config.hpp"
-#include "libconfig.h++"
 #include <stdio.h>
 #include <vector>
+#include "board_config.hpp"
+#include "libconfig.h++"
 
 namespace board_config {
 

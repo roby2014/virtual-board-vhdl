@@ -1,6 +1,6 @@
+#include <algorithm>
 #include "pin.hpp"
 #include "vpi.hpp"
-#include <algorithm>
 
 /// returns signal's bit value at index
 int pin::get_value() const {
@@ -18,18 +18,12 @@ void pin::set_value(bool value) {
         return;
 
     auto curr = vpi::get_net_val(net);
-    auto mask = ~(1 << index);
-    printf("curr = %d\n", curr);
-    printf("mask = %d\n", mask);
+    auto mask = (1 << index);
 
-    // FIXME: i dont think this is correct, needs more testing
-
-    s_vpi_value val;
+    s_vpi_value val{.format = vpiIntVal};
     if (!value) {
-        val.format = vpiIntVal;
         val.value.integer = curr & mask;
     } else {
-        val.format = vpiIntVal;
         val.value.integer = curr | mask;
     }
 
