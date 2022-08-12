@@ -1,7 +1,8 @@
 VHDL_FILES = assets/app.vhdl 	# all vhdl files to analyze
 EXEC_TOP_UNIT = up_counter 		# top entity name
 
-SRC		= $(shell find ./src/ -name "*.cpp")
+SRC=$(shell find ./src/ -name "*.cpp")
+OBJ=$(SRC:.cpp=.o )
 INCLUDE = src
 LIB		= 
 BUILD   = build
@@ -17,14 +18,20 @@ INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg
 
 GHDL     = ghdl
 GHDLLD   = $(GHDL) --vpi-link $(CXX)
+GHDLC   = $(GHDL) --vpi-compile $(CXX)
 
 all: $(BUILD)/$(TARGET)
 
 pch: src/pch.hpp
 	$(CXX) src/pch.hpp
 
+%.o: %.cpp
+	$(GHDLC) $(CXXFLAGS) $(INCLUDEFLAG) -c $^ -o $@
+
+compile: $(OBJ)
+
 # TODO: recompile if headers are changed
-$(BUILD)/$(TARGET): $(SRC)
+$(BUILD)/$(TARGET): $(OBJ)
 	$(GHDLLD) $(CXXFLAGS) $(INCLUDEFLAG) $^ -o $@ $(LIBRARIES)
 
 exec: $(BUILD)/$(TARGET)
@@ -36,4 +43,3 @@ clean:
 	@rm $(BUILD)/*
 	@rm -vf work-*.cf
 	@rm -vf *.o
-
