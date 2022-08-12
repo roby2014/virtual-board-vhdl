@@ -154,5 +154,6 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         auto pin = vb->_pin_set.get_pin(pin_id);
         pin->set_value(value);
         printf("setting %s to %d\n", pin->id.c_str(), value);
+        // TODO: send this to main callback (thread communication, mutex maybe?)
     }
 }

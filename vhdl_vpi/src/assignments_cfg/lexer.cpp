@@ -1,7 +1,6 @@
-#include "lexer.hpp"
 #include <string>
 #include <vector>
-
+#include "lexer.hpp"
 namespace assignments_cfg {
 
 TOKEN_LIST lexer::get_tokens(const std::string& input) {

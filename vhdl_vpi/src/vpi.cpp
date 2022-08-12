@@ -1,10 +1,11 @@
-#include "vpi.hpp"
-#include "board_config.hpp"
-#include "websocket_server.hpp"
 #include <algorithm>
 #include <fstream>
 #include <stdexcept>
 #include <thread>
+#include "vpi.hpp"
+#include "board_config.hpp"
+#include "virtual_board.hpp"
+#include "websocket_server.hpp"
 
 #define DEBUG
 
@@ -122,7 +123,6 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     set_net_val(vb->_pin_set.get_pin_net("clk", 0), test);
     test = !test;
 
-    printf("cout = %d\n", get_net_val(vb->_pin_set.get_pin_net("cout", 0)));
     register_cb_after(main_callback, 1, vb);
     return 0;
 }
