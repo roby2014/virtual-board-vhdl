@@ -1,13 +1,8 @@
 #include "websocket_server.hpp"
 #include "board_config.hpp"
+#include "pin.hpp"
 #include "utils.hpp"
 #include "virtual_board.hpp"
-#include <boost/algorithm/string.hpp>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
-#include <string>
-#include <thread>
 
 namespace ws_sv {
 
@@ -126,10 +121,10 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
             return;
         }
 
-        auto value = msg[2];
-
-        // TODO: put value to x bit only! dont change the whole net
-        //  ws.write(net::buffer(std::string(response)));
+        auto value = msg[2] != "0";
+        auto pin = vb->_pin_set.get_pin(pin_id);
+        pin->set_value(value);
+        printf("setting %s to %d\n", pin->id.c_str(), value);
     }
 }
 

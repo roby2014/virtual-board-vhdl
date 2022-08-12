@@ -20,6 +20,9 @@ GHDLLD   = $(GHDL) --vpi-link $(CXX)
 
 all: $(BUILD)/$(TARGET)
 
+pch: src/pch.h
+	$(CXX) -x c++-header -o src/pch.h.gch -c src/pch.h
+
 # TODO: recompile if headers are changed
 $(BUILD)/$(TARGET): $(SRC)
 	$(GHDLLD) $(CXXFLAGS) $(INCLUDEFLAG) $^ -o $@ $(LIBRARIES)
