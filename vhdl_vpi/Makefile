@@ -8,7 +8,7 @@ BUILD   = build
 TARGET  = virtual_board.vpi
 
 CXX      = g++
-CXXFLAGS = -W -Wall -Wextra -O2 -std=c++2a -fPIC -pthread
+CXXFLAGS = -W -Wall -Wextra -std=c++2a -fPIC -pthread
 CXXFLAGS += -Wno-write-strings -Wno-missing-field-initializers -Wno-format
 LIBRARIES  = -lm -lconfig++
 
@@ -33,7 +33,7 @@ exec: $(BUILD)/$(TARGET)
 	$(GHDL) -r -fsynopsys $(EXEC_TOP_UNIT) --vpi=./$(BUILD)/$(TARGET)
 
 clean:
-	@rm $(BIN)/*
+	@rm $(BUILD)/*
 	@rm -vf work-*.cf
 	@rm -vf *.o
 

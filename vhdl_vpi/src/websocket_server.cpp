@@ -1,8 +1,23 @@
 #include "websocket_server.hpp"
 #include "board_config.hpp"
+#include "pch.hpp"
 #include "pin.hpp"
 #include "utils.hpp"
 #include "virtual_board.hpp"
+
+namespace beast = boost::beast;         // from <boost/beast.hpp>
+namespace http = beast::http;           // from <boost/beast/http.hpp>
+namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
+namespace net = boost::asio;            // from <boost/asio.hpp>
+using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+
+/* FUNCTION DECLARATION */
+
+/// handles socket connection on a separate thread
+void do_session(tcp::socket socket, virtual_board* vb);
+
+/// handle ws message
+void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtual_board* vb);
 
 namespace ws_sv {
 
@@ -35,6 +50,10 @@ void open_ws_server(virtual_board* vb) {
         exit(EXIT_FAILURE);
     }
 }
+
+}; // namespace ws_sv
+
+/* FUNCTION DEFINITION */
 
 void do_session(tcp::socket socket, virtual_board* vb) {
     try {
@@ -127,5 +146,3 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         printf("setting %s to %d\n", pin->id.c_str(), value);
     }
 }
-
-}; // namespace ws_sv

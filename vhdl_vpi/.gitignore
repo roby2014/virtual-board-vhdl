@@ -1,7 +1,5 @@
 .vscode
-# Ignore build/bin directories
-[Bb]uild/
-build_*/
+build/*
 .DS_Store
 *.cf
 *.gch
