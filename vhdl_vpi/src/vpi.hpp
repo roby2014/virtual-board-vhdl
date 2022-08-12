@@ -9,8 +9,6 @@
 
 #define CLK_SPEED 1
 
-// compiler things..
-
 /// VPI related functions/wrappers
 namespace vpi {
 

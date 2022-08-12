@@ -1,7 +1,9 @@
 #include "vpi.hpp"
 #include "board_config.hpp"
 #include "websocket_server.hpp"
+#include <algorithm>
 #include <fstream>
+#include <stdexcept>
 #include <thread>
 
 #define DEBUG

@@ -1,19 +1,19 @@
 VHDL_FILES = assets/app.vhdl 	# all vhdl files to analyze
 EXEC_TOP_UNIT = up_counter 		# top entity name
 
-SRC=$(shell find ./src/ -name "*.cpp")
-OBJ=$(SRC:.cpp=.o )
+SRC		= $(shell find ./src/ -name "*.cpp")
+OBJ		= $(SRC:.cpp=.o )
 INCLUDE = src
 LIB		= 
 BUILD   = build
 TARGET  = virtual_board.vpi
 
-CXX      = g++
-CXXFLAGS = -W -Wall -Wextra -std=c++2a -fPIC -pthread
-CXXFLAGS += -Wno-write-strings -Wno-missing-field-initializers -Wno-format
-LIBRARIES  = -lm -lconfig++
+CXX      	= g++
+CXXFLAGS 	= -W -Wall -Wextra -std=c++2a -fPIC -pthread
+CXXFLAGS 	+= -Wno-write-strings -Wno-missing-field-initializers -Wno-format
+LIBRARIES  	= -lm -lconfig++
 
-# TODO: better way of doin this
+# TODO: better way of doing this
 INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg
 
 GHDL     = ghdl
@@ -22,15 +22,11 @@ GHDLC   = $(GHDL) --vpi-compile $(CXX)
 
 all: $(BUILD)/$(TARGET)
 
-pch: src/pch.hpp
-	$(CXX) src/pch.hpp
-
 %.o: %.cpp
 	$(GHDLC) $(CXXFLAGS) $(INCLUDEFLAG) -c $^ -o $@
 
 compile: $(OBJ)
 
-# TODO: recompile if headers are changed
 $(BUILD)/$(TARGET): $(OBJ)
 	$(GHDLLD) $(CXXFLAGS) $(INCLUDEFLAG) $^ -o $@ $(LIBRARIES)
 
@@ -42,4 +38,5 @@ exec: $(BUILD)/$(TARGET)
 clean:
 	@rm $(BUILD)/*
 	@rm -vf work-*.cf
-	@rm -vf *.o
+	@rm -vf src/*.o
+	@rm -vf src/assignments_cfg/*.o

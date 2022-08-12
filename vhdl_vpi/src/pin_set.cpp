@@ -33,7 +33,7 @@ pin* pin_set::get_pin(const std::string& pin_id) {
             return &p;
     }
     fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin");
-    // TODO: returning a pointer can be a really bad idea because pins is a std::vector
+    // TODO: returning a pointer can be a really bad idea because "pins" is a std::vector
     return nullptr;
 }
 
