@@ -2,10 +2,6 @@
 #define VPI_HPP
 
 #include "assignments_cfg/parser.hpp"
-#include "pin.hpp"
-#include "pin_set.hpp"
-#include "virtual_board.hpp"
-#include "vpi.hpp"
 #include "vpi_user.h"
 
 #define CLK_SPEED 1

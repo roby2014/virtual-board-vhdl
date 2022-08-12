@@ -1,10 +1,10 @@
 #ifndef PIN_SET_HPP
 #define PIN_SET_HPP
 
-#include "pin.hpp"
-#include "vpi_user.h"
 #include <string>
 #include <vector>
+#include "pin.hpp"
+#include "vpi_user.h"
 
 /// Collection of pins encapsulated in this class
 /// It has some utility functions for pin stuff (searching, debugging, inserting, ...)

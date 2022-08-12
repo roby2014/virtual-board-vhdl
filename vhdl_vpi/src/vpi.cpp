@@ -1,8 +1,15 @@
-#include "vpi.hpp"
-#include "board_config.hpp"
-#include "websocket_server.hpp"
 #include <fstream>
 #include <thread>
+#include <stdexcept>
+#include <algorithm>
+
+#include "pin.hpp"
+#include "pin_set.hpp"
+#include "virtual_board.hpp"
+#include "vpi.hpp"
+#include "vpi_user.h"
+#include "board_config.hpp"
+#include "websocket_server.hpp"
 
 #define DEBUG
 

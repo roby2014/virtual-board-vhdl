@@ -1,10 +1,11 @@
 #ifndef ASSIGNMENTS_CFG_PARSER_HPP
 #define ASSIGNMENTS_CFG_PARSER_HPP
 
-#include "lexer.hpp"
 #include <optional>
 #include <string>
 #include <vector>
+#include <stdexcept>
+#include "lexer.hpp"
 
 /// Parser stuff for our custom pin assignments config file
 namespace assignments_cfg {

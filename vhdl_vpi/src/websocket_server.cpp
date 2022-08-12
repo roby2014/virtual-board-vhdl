@@ -1,10 +1,33 @@
 #include "websocket_server.hpp"
-#include "board_config.hpp"
 #include "pin.hpp"
 #include "utils.hpp"
 #include "virtual_board.hpp"
 
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <string>
+#include <thread>
+
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+#include <boost/algorithm/string/trim.hpp>
+
 namespace ws_sv {
+namespace beast = boost::beast;         // from <boost/beast.hpp>
+namespace http = beast::http;           // from <boost/beast/http.hpp>
+namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
+namespace net = boost::asio;            // from <boost/asio.hpp>
+using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
+
+/// handles socket connection on a separate thread
+void do_session(tcp::socket socket, virtual_board* vb);
+
+/// handle ws message
+void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtual_board* vb);
+
+
 
 void open_ws_server(virtual_board* vb) {
     printf("Opening Websocket server... (127.0.0.1:8083)\n");

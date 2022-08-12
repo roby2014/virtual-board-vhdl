@@ -1,8 +1,8 @@
 #ifndef BOARD_CONFIG_HPP
 #define BOARD_CONFIG_HPP
 
-#include "libconfig.h++"
 #include <vector>
+#include <libconfig.h++>
 
 namespace board_config {
 

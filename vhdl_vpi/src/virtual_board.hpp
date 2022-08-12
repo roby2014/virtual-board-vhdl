@@ -1,8 +1,8 @@
 #ifndef VIRTUAL_BOARD_HPP
 #define VIRTUAL_BOARD_HPP
 
-#include "pin_set.hpp"
 #include <string>
+#include "pin_set.hpp"
 
 /// Represents the virtual board
 class virtual_board {
