@@ -137,7 +137,7 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
 
     printf("cout = %d\n", get_net_val(vb->_pin_set.get_pin_net("cout")));
 
-    sleep(1);
+    //    sleep(1);
     check_error();
     register_cb_after(main_callback, 1, vb);
     return 0;

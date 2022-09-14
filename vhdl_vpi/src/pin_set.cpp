@@ -17,19 +17,19 @@ bool pin_set::pin_exists(pin p) const {
     return false;
 }
 
-/// returns true if [p] exists on pin set
-bool pin_set::pin_exists(const std::string& pin_id) const {
+/// returns true if pin with pin_info (net_name/id) exists on pin set
+bool pin_set::pin_exists(const std::string& pin_info) const {
     for (const auto& p : pins) {
-        if (p.id == pin_id)
+        if (p.id == pin_info || p.net_name == pin_info)
             return true;
     }
     return false;
 }
 
 /// returns pointer to pin by his identifier
-pin* pin_set::get_pin(const std::string& pin_id) {
+pin* pin_set::get_pin(const std::string& pin_info) {
     for (auto& p : pins) {
-        if (p.id == pin_id)
+        if (p.id == pin_info || p.net_name == pin_info)
             return &p;
     }
     fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin");
@@ -47,7 +47,7 @@ bool pin_set::get_pin_value(const std::string& pin_id) const {
     return 0;
 }
 
-/// returns net's signal value by his net name and index (e.g cout[3] = cout, 3)
+/// returns pin's value by his net name and index (e.g cout[3] = cout, 3)
 bool pin_set::get_pin_value(const std::string& net_name, std::size_t index) const {
     for (const auto& p : pins) {
         if (p.net_name == net_name && p.index == index)

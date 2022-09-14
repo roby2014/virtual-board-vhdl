@@ -22,6 +22,7 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 
 /* FUNCTION DECLARATION */
+// declared here and not in the header because we dont need them in other files
 
 /// handles socket connection on a separate thread
 void do_session(tcp::socket socket, virtual_board* vb);
@@ -133,7 +134,7 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         }
 
         auto pin_id = msg[1];
-        if (!vb->_pin_set.pin_exists(pin_id)) {
+        if (!vb->_pin_set.pin_exists(pin_id) || !vb->_pin_set.get_pin_value()) {
             ws.write(net::buffer(std::string("Unknown PIN_ID")));
             return;
         }
