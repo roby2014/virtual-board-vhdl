@@ -32,9 +32,9 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
 namespace ws_sv {
 
 void open_ws_server(virtual_board* vb) {
-    printf("Opening Websocket server... (127.0.0.1:8083)\n");
+    printf("Opening Websocket server... ( ws://127.0.0.1:8083 )\n");
     try {
-        // TODO: no hardcoded values
+        // TODO: no hardcoded values (make it via cfg file?)
         auto const address = net::ip::make_address("127.0.0.1");
         auto const port = 8083;
 
@@ -52,8 +52,6 @@ void open_ws_server(virtual_board* vb) {
 
             // Launch the session, transferring ownership of the socket
             std::thread(&do_session, std::move(socket), vb).detach();
-
-            // TODO: for now this handles only 1 ws conn
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
@@ -104,29 +102,39 @@ void do_session(tcp::socket socket, virtual_board* vb) {
 
 void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtual_board* vb) {
     // "communication protocol":
-    // GET <PIN_ID> - returns pin's signal value (1/0)
-    // PUT <PIN_ID> <VALUE> - puts pin's signal value to value
+    // HELP - prints communication protocol info
+    // GET <PIN_ID> - returns <PIN_ID> signal value (1/0)
+    // PUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>
 
+    // Parse message (can be done a lot better)
     boost::trim(buff);
-
     auto msg = utils::split(buff, ' '); // separates into tokens
     auto cmd = msg[0];
 
-    if (cmd != "GET" && cmd != "PUT") {
+    if (cmd != "GET" && cmd != "PUT" && cmd != "HELP") {
         ws.write(net::buffer(std::string("Unknown command, try GET or PUT.\n")));
+        return;
+    }
+
+    // HELP
+    if (cmd == "HELP") {
+        ws.write(net::buffer(
+            std::string("\nGET <PIN_ID> - returns <PIN_ID> signal value (1/0)"
+                        "\nPUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>\n")));
+        return;
     }
 
     // GET <PIN_ID>
     if (cmd == "GET") {
         if (msg.size() != 2) {
-            ws.write(
-                net::buffer(std::string("Usage: GET <PIN_ID> - returns pin's signal value (1/0)")));
+            ws.write(net::buffer(
+                std::string("Usage: GET <PIN_ID> - returns <PIN_ID> signal value (1/0)")));
             return;
         }
 
         auto pin_id = msg[1];
         if (!vb->_pin_set.pin_exists(pin_id)) {
-            ws.write(net::buffer(std::string("Unknown PIN_ID.")));
+            ws.write(net::buffer(std::string("Unknown PIN_ID")));
             return;
         }
 
@@ -139,21 +147,19 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
     // PUT <PIN_ID> <VALUE>
     if (cmd == "PUT") {
         if (msg.size() != 3) {
-            ws.write(net::buffer(
-                std::string("Usage: PUT <PIN_ID> <VALUE> - changes pin's signal value")));
+            ws.write(net::buffer(std::string(
+                "Usage: PUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>")));
             return;
         }
 
         auto pin_id = msg[1];
         if (!vb->_pin_set.pin_exists(pin_id)) {
-            ws.write(net::buffer(std::string("Unknown PIN_ID.")));
+            ws.write(net::buffer(std::string("Unknown PIN_ID")));
             return;
         }
 
         auto value = msg[2] != "0";
-        auto pin = vb->_pin_set.get_pin(pin_id);
-        pin->set_value(value);
-        printf("setting %s to %d\n", pin->id.c_str(), value);
-        // TODO: send this to main callback (thread communication, mutex maybe?)
+        auto pin = vb->_pin_set.get_pin_net(pin_id);
+        vb->_events.push(board_event{pin, value});
     }
 }

@@ -57,20 +57,10 @@ bool pin_set::get_pin_value(const std::string& net_name, std::size_t index) cons
     return 0;
 }
 
-/// returns a net pointer to pin's by his identifier
-vpiHandle pin_set::get_pin_net(const std::string& pin_id) const {
+/// returns a net pointer to pin by his identifier / signal name
+vpiHandle pin_set::get_pin_net(const std::string& pin_info) const {
     for (const auto& p : pins) {
-        if (p.id == pin_id)
-            return p.net;
-    }
-    fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin_net");
-    return nullptr;
-}
-
-/// returns a net pointer to pin's by signal name
-vpiHandle pin_set::get_pin_net(const std::string& net_name, std::size_t index) const {
-    for (const auto& p : pins) {
-        if (p.net_name == net_name && p.index == index)
+        if (pin_info == p.id || pin_info == p.net_name)
             return p.net;
     }
     fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin_net");

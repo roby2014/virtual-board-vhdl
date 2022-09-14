@@ -37,6 +37,8 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data);
 
 /// Returns [net]'s value as integer
+/// *WARNING* if signal is an array, this function will return all the bits
+/// in case you want specific bits, use get_bit_net function
 int get_net_val(vpiHandle net);
 
 /// Sets [net] value to [value] integer
