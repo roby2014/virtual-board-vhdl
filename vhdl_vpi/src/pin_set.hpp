@@ -20,17 +20,16 @@ public:
     /// returns true if [p] exists on pin set
     bool pin_exists(pin p) const;
 
-    /// returns true if [p] exists on pin set
-    bool pin_exists(const std::string& pin_id) const;
+    /// returns true if pin with pin_info (net_name/id) exists on pin set
+    bool pin_exists(const std::string& pin_info) const;
 
-    /// returns pointer to pin by his identifier
-    // TODO: returning a pointer can be a really bad idea because pins is a std::vector
-    pin* get_pin(const std::string& pin_id);
+    /// returns pointer to pin by his identifier/signal name
+    pin* get_pin(const std::string& pin_info);
 
     /// returns pin's signal value by his identifier
     bool get_pin_value(const std::string& pin_id) const;
 
-    /// returns net's signal value by his net name and index (e.g cout[3] = cout, 3)
+    /// returns pin's value by his net name and index (e.g cout[3] = cout, 3)
     bool get_pin_value(const std::string& net_name, std::size_t index) const;
 
     /// returns a net pointer to pin by his identifier / signal name
