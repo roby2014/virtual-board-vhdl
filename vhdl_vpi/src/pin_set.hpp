@@ -33,11 +33,8 @@ public:
     /// returns net's signal value by his net name and index (e.g cout[3] = cout, 3)
     bool get_pin_value(const std::string& net_name, std::size_t index) const;
 
-    /// returns a net pointer to pin's by his identifier
-    vpiHandle get_pin_net(const std::string& pin_id) const;
-
-    /// returns a net pointer to pin's by signal name
-    vpiHandle get_pin_net(const std::string& net_name, std::size_t index) const;
+    /// returns a net pointer to pin by his identifier / signal name
+    vpiHandle get_pin_net(const std::string& pin_info) const;
 
     /// prints pin set
     void debug_pin_set() const;

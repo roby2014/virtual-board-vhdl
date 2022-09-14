@@ -114,15 +114,31 @@ PLI_INT32 cb_init(p_cb_data cb_data) {
 }
 
 PLI_INT32 main_callback(p_cb_data cb_data) {
-    static bool test = false;
+    static bool test = false; // testing purposes
     virtual_board* vb = (virtual_board*)cb_data->user_data;
 
-    printf("press enter for next clock\n");
-    getchar();
+    // printf("press enter for next clock\n");
+    // getchar();
 
-    set_net_val(vb->_pin_set.get_pin_net("clk", 0), test);
+    set_net_val(vb->_pin_set.get_pin_net("clk"), test);
     test = !test;
 
+    // check if any pin change event occurred in the other thread (via websocket)
+    auto& q = vb->_events;
+    while (!q.empty()) {
+        auto pin_net = q.front().pin_net;
+        auto new_value = q.front().new_value;
+        set_net_val(pin_net, new_value);
+        q.pop();
+#ifdef DEBUG
+        vpi_printf("\t CHANGING %p VALUE TO %d \n", pin_net, new_value);
+#endif
+    }
+
+    printf("cout = %d\n", get_net_val(vb->_pin_set.get_pin_net("cout")));
+
+    sleep(1);
+    check_error();
     register_cb_after(main_callback, 1, vb);
     return 0;
 }
