@@ -33,9 +33,7 @@ PUT <PIN_ID> <VALUE> - puts pin's signal value to value
 ```
 
 # Test and run
-I have only tested this project on these platforms:
 
-## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
 Compile and run:
 ```
 mkdir build
@@ -43,7 +41,38 @@ make
 make exec
 ```
 
-Dependencies (might work with other version):
+I have only tested this project on these platforms with these package versions:
+
+## EndeavourOS (5.19.8-arch1-1 kernel)
+```
+$ g++ -v
+
+gcc version 12.2.0 (GCC)
+```
+
+```
+$ ghdl -v
+
+GHDL 3.0.0-dev (tarball) [Dunoon edition]
+ Compiled with GNAT Version: 12.1.0
+ mcode code generator
+Written by Tristan Gingold.
+```
+
+```
+$ pacman -Q --info libconfig | grep 'Version'
+
+Version         : 1.7.3-1
+```
+
+```
+$ pacman -Q --info boost | grep 'Version'
+
+Version         : 1.79.0-1
+```
+
+## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
+
 ```
 $ g++ -v
 
