@@ -1,0 +1,6 @@
+analyze all app.vhdl dependencies
+ghdl -a -fsynopsys app.vhdl
+ghdl -a -fsynopsys app_tb.vhdl
+ghdl -e -fsynopsys app_tb
+ghdl -r -fsynopsys app_tb --wave=wave.ghw
+tkwave wave.ghw

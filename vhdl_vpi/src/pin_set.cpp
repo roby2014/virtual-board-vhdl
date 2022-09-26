@@ -32,18 +32,24 @@ pin* pin_set::get_pin(const std::string& pin_info) {
         if (p.id == pin_info || p.net_name == pin_info)
             return &p;
     }
-    fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin");
-    // TODO: returning a pointer can be a really bad idea because "pins" is a std::vector
+    return nullptr;
+}
+
+/// returns pointer to pin by his identifier
+pin* pin_set::get_pin(const vpiHandle pin_handle) {
+    for (auto& p : pins) {
+        if (p.net == pin_handle)
+            return &p;
+    }
     return nullptr;
 }
 
 /// returns pin's signal value by his identifier
-bool pin_set::get_pin_value(const std::string& pin_id) const {
+bool pin_set::get_pin_value(const std::string& pinId) const {
     for (const auto& p : pins) {
-        if (p.id == pin_id)
+        if (p.id == pinId)
             return p.get_value();
     }
-    fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin_value");
     return 0;
 }
 
@@ -53,7 +59,6 @@ bool pin_set::get_pin_value(const std::string& net_name, std::size_t index) cons
         if (p.net_name == net_name && p.index == index)
             return p.get_value();
     }
-    fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin_value");
     return 0;
 }
 
@@ -63,7 +68,6 @@ vpiHandle pin_set::get_pin_net(const std::string& pin_info) const {
         if (pin_info == p.id || pin_info == p.net_name)
             return p.net;
     }
-    fprintf(stderr, "VPI_ERROR: Something went wrong @ get_pin_net");
     return nullptr;
 }
 

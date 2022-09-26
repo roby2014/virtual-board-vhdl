@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>de10 board</title>
+</head>
+
+<body>
+    <img class="escola" src="logo.png" width="450" alt="logo">
+    <img class="modelo" src="unknown.svg" alt="modelo">
+
+    <div style="color:white" id="result"></div>
+
+    <div class="">
+        <div class="btn-wrap">
+            <div class="btn" onclick="cpp_OnButtonPress(1); ">
+                <div class="btn-circle"></div>
+            </div>
+            <div class="btn" onclick="cpp_OnButtonPress(2); ">
+                <div class="btn-circle"></div>
+            </div>
+        </div>
+        <div class="segment-switchs-wraps">
+            <div class="segment-display" id="segment_one">
+                <h1>00</h1>
+            </div>
+            <div class="segment-display" id="segment_two">
+                <h1>00</h1>
+            </div>
+            <div class="segment-display" id="segment_three">
+                <h1>00</h1>
+            </div>
+
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR9</h1>
+                    <div class="led" id="PIN_A9"></div>
+                    <h1>SW9</h1>
+                </div>
+                <div class="switchs active" id="switch_nine" data-value="PIN_SW9">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR8</h1>
+                    <div class="led" id="PIN_A8"></div>
+                    <h1>SW8</h1>
+                </div>
+                <div class="switchs active" id="switch_eight" data-value="PIN_SW8">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR7</h1>
+                    <div class="led" id="PIN_A7"></div>
+                    <h1>SW7</h1>
+                </div>
+                <div class="switchs active" id="switch_seven" data-value="PIN_SW7">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR6</h1>
+                    <div class="led" id="PIN_A6"></div>
+                    <h1>SW6</h1>
+                </div>
+                <div class="switchs active" id="switch_six" data-value="PIN_SW6">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR5</h1>
+                    <div class="led" id="PIN_A5"></div>
+                    <h1>SW5</h1>
+                </div>
+                <div class="switchs active" id="switch_five" data-value="PIN_SW5">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR4</h1>
+                    <div class="led" id="PIN_A4"></div>
+                    <h1>SW4</h1>
+                </div>
+                <div class="switchs active" id="switch_four" data-value="PIN_SW4">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR3</h1>
+                    <div class="led" id="PIN_A3"></div>
+                    <h1>SW3</h1>
+                </div>
+                <div class="switchs active" id="switch_three" data-value="PIN_SW3">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR2</h1>
+                    <div class="led" id="PIN_A2"></div>
+                    <h1>SW2</h1>
+                </div>
+                <div class="switchs active" id="switch_two" data-value="PIN_SW2">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR1</h1>
+                    <div class="led" id="PIN_A1"></div>
+                    <h1>SW1</h1>
+                </div>
+                <div class="switchs active" id="switch_one" data-value="PIN_SW1">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+            <div class="switch-led">
+                <div>
+                    <h1>LEDR0</h1>
+                    <div class="led" id="PIN_A0"></div>
+                    <h1>SW0</h1>
+                </div>
+                <div class="switchs active" id="switch_zero" data-value="PIN_SW0">
+                    <div class="switch-on"></div>
+                    <div class="switch-off on"></div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <script src="jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

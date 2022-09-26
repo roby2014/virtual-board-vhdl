@@ -26,8 +26,11 @@ public:
     /// returns pointer to pin by his identifier/signal name
     pin* get_pin(const std::string& pin_info);
 
+    /// returns pointer to pin by his vpi handle pointer
+    pin* get_pin(const vpiHandle pin_handle);
+
     /// returns pin's signal value by his identifier
-    bool get_pin_value(const std::string& pin_id) const;
+    bool get_pin_value(const std::string& pinId) const;
 
     /// returns pin's value by his net name and index (e.g cout[3] = cout, 3)
     bool get_pin_value(const std::string& net_name, std::size_t index) const;

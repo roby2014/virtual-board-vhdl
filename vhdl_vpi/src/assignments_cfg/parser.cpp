@@ -66,10 +66,11 @@ template <token_type TYPE> std::optional<token> parser::expect_(const std::strin
 }
 
 void parser::debug_assignments(const std::vector<pin_assignment>& assignments) {
-    printf("[debug] PIN ASSIGNMENTS:\n");
+    printf("[debug PIN ASSIGNMENTS] start\n");
     for (const auto& a : assignments) {
         a.debug_assignment();
     }
+    printf("[debug PIN ASSIGNMENTS] end\n");
 }
 
 } // namespace assignments_cfg

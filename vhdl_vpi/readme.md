@@ -1,41 +1,58 @@
 # VPI module
-To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL`, `libconfig++-dev` and `libboost-dev`.
+To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL` and `seasocks`.
 
 If you want to test other VHDL code, you have to change `VHDL_FILES` and `EXEC_TOP_UNIT` inside the Makefile.
 
 
 # Configuration
 
-You can configure your board PIN Set inside [`assets/board.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/board.cfg) and the signals assignments inside [`assets/assignments.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/assignments.cfg).
+You can configure your board PIN Set inside [`assets/board.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/board.cfg) and the signals assignments inside [`assets/assignments.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/assignments.cfg).
 For more info read: 
 
 ## Custom PIN Set board configuration
-This emulator allows having a custom PIN set, to add your desired pins, edit [`assets/board.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/board.cfg).
-Each pin should have a `pin_name`, `pin_id` and its `index`.
+This emulator allows having a custom PIN set, to add your desired pins, edit [`assets/board.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/board.cfg).
+Each pin should have a `pinName`, `pinId`.
 For now, only `leds`, `switches`, (`hex` and `buttons` in the future) are allowed.
 
 ## Signal assignments
-To assign your top entity VHDL signals to board PINS, edit [`assets/assignments.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/assignments.cfg).
+To assign your top entity VHDL signals to board PINS, edit [`assets/assignments.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/assignments.cfg).
 The configuration should look pretty obvious if you open the file, but just in case, this is how it's done:
 ```
 // This is a comment
-// PIN_ID -> SIGNAL
+// pinId -> SIGNAL
 
 PIN_A8 -> enable
 PIN_A9 -> COUT
 ```
 
 ## Websocket server
-Communication protocol:
+
+Everytime a signal/pin value changes, the websocket server sends a message to all its clients connected. 
+
+Let's suppose `PIN_A9` changed to 1, this is what the server will send to its peers:
 ```
-GET <PIN_ID> - returns pin's signal value (1/0)
-PUT <PIN_ID> <VALUE> - puts pin's signal value to value
+PIN_A9 = 1
 ```
+
+The peers can also manipulate input signals:
+```
+CHANGE PIN_A9 0
+```
+
+## UsbPort
+
+The HTTP server is opened if `inputport_sw` and `outputport_sw` are valid signals on the simulation top entity.
+
+```
+GET /usbport/inputport_sw
+
+PUT /usbport/outputport_sw
+params: value (7 bit value)
+```
+
 
 # Test and run
-I have only tested this project on these platforms:
 
-## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
 Compile and run:
 ```
 mkdir build
@@ -43,7 +60,26 @@ make
 make exec
 ```
 
-Dependencies (might work with other version):
+I have only tested this project on these platforms with these package versions:
+
+## EndeavourOS (5.19.8-arch1-1 kernel)
+```
+$ g++ -v
+
+gcc version 12.2.0 (GCC)
+```
+
+```
+$ ghdl -v
+
+GHDL 3.0.0-dev (tarball) [Dunoon edition]
+ Compiled with GNAT Version: 12.1.0
+ mcode code generator
+Written by Tristan Gingold.
+```
+
+## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
+
 ```
 $ g++ -v
 
@@ -57,11 +93,6 @@ GHDL 3.0.0-dev (tarball) [Dunoon edition]
  Compiled with GNAT Version: 9.4.0
  mcode code generator
 Written by Tristan Gingold.
-```
-
-```
-$ dpkg -s libconfig++-dev | grep 'Version'
-Version: 1.5-0.4build1
 ```
 
 ```

@@ -1,0 +1,10 @@
+v 4
+file . "./7seg.vhdl" "2c833db664a899a688607c08c8a0e6e8ab556c56" "20221113210454.322":
+  entity bcd_7segment at 1( 0) + 0 on 527;
+  architecture behavioral of bcd_7segment at 10( 207) + 0 on 528;
+file . "./test.vhdl" "82ca3292a96ecc4d9e660f89fa4508932fe655a1" "20221113210454.312":
+  entity up_counter at 1( 0) + 0 on 523;
+  architecture rtl of up_counter at 21( 530) + 0 on 524;
+file . "./test2.vhdl" "2199c5650c8479c48dc7201444e30639fea97b14" "20221113210454.317":
+  entity usbport_vpi_ghdl at 1( 0) + 0 on 525;
+  architecture usbport of usbport_vpi_ghdl at 13( 323) + 0 on 526;

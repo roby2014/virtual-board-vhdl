@@ -5,7 +5,6 @@
 #include "vpi.hpp"
 #include "board_config.hpp"
 #include "virtual_board.hpp"
-#include "websocket_server.hpp"
 
 #define DEBUG
 
@@ -41,7 +40,7 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     s_vpi_vlog_info info;
     vpi_get_vlog_info(&info);
     vpi_printf("-------------------------------------------------\n");
-    vpi_printf("VHDL Virtual Board Emulator using VPI + GHDL\n");
+    vpi_printf("VHDL Simulator via Virtual Board using VPI + GHDL\n");
     vpi_printf("Copyright (C) 2022 roby\n");
     vpi_printf("%s %s\n", info.product, info.version);
     vpi_printf("-------------------------------------------------\n");
@@ -51,6 +50,12 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
 
     // parse custom pin assignments
     std::ifstream ifs("assets/assignments.cfg");
+    if (!ifs.is_open()) {
+        fprintf(stderr, "Assignments config @ I/O error while reading file, does "
+                        "'assets/assignments.cfg' exist?. \n");
+        exit(-1);
+    }
+
     std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
     assignments_cfg::lexer lexer;
     assignments_cfg::parser parser;
@@ -62,11 +67,21 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     parser.debug_assignments(result);
 #endif
 
+    if (result.size() == 0) {
+        vpi_printf("VPI_WARNING: 'assets/assignments.cfg' DOES NOT CONTAIN ANY PIN ASSIGNMENT.\n");
+    }
+
     // check if pins from assignments file are valid
     for (const auto& assignment : result) {
         if (!board_config::pin_exists(board_pins, assignment.pin)) {
             vpi_printf("VPI_ERROR: PIN \"%s\" does not exist in your board config.\n",
                        assignment.pin.c_str());
+            exit(EXIT_FAILURE);
+        }
+        // TODO: is this correct
+        if (assignment.signal_dst == "outputport_sw" || assignment.signal_dst == "inputport_sw") {
+            vpi_printf("VPI_ERROR: PIN assigning UsbPorts (outputport_sw/inputport_sw) is not "
+                       "permitted.\n");
             exit(EXIT_FAILURE);
         }
     }
@@ -82,7 +97,8 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     return 0;
 }
 
-PLI_INT32 cb_simulation_end(p_cb_data cb_data __attribute__((unused))) {
+PLI_INT32 cb_simulation_end(p_cb_data cb_data) {
+    (void)cb_data; // unused parameter compiler warning
     vpi_printf("END OF SIMULATION\n");
     return 0;
 }
@@ -90,26 +106,18 @@ PLI_INT32 cb_simulation_end(p_cb_data cb_data __attribute__((unused))) {
 PLI_INT32 cb_init(p_cb_data cb_data) {
     virtual_board* vb = (virtual_board*)cb_data->user_data;
 
-    std::thread(ws_sv::open_ws_server, vb).detach(); // open websocket server in a separate thread
+    // open websocket & http server in a separate thread
+    vb->open_ws_server();
+    vb->open_http_server();
 
-    static int startup_cnt = 0;
-
-    switch (startup_cnt) {
-    case 0:
-        // register linked pins values change event
-
-        for (auto& p : vb->_pin_set.pins) {
-            register_pins_value_change_cb(on_pins_value_change, &p);
-        }
-
-        register_cb_after(main_callback, CLK_SPEED, vb);
-        break;
-
-    default:
-        vpi_printf("VPI_ERROR: cb_init UB\n");
+    // register linked pins values change event
+    for (auto& p : vb->_pin_set.pins) {
+        register_pins_value_change_cb(on_pins_value_change, &p, vb);
     }
 
-    startup_cnt++;
+    // register main callback (loop)
+    register_cb_after(main_callback, CLK_SPEED, vb);
+
     return 0;
 }
 
@@ -120,49 +128,74 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     // printf("press enter for next clock\n");
     // getchar();
 
-    set_net_val(vb->_pin_set.get_pin_net("clk"), test);
+    set_net_val(vpi_handle_by_name("up_counter.clk", NULL), test);
+    // set_net_val(vb->_pin_set.get_pin_net("clk"), test);
+
+    //printf("Setting clock to %d, cout value = %d\n", test,
+           //get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+
     test = !test;
 
-    // check if any pin change event occurred in the other thread (via websocket)
-    auto& q = vb->_events;
-    while (!q.empty()) {
-        auto pin_net = q.front().pin_net;
-        auto new_value = q.front().new_value;
-        set_net_val(pin_net, new_value);
-        q.pop();
-#ifdef DEBUG
-        vpi_printf("\t CHANGING %p VALUE TO %d \n", pin_net, new_value);
-#endif
-    }
+    // printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
+    printf("cout = %d\t", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    //printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
+    // set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
 
-    printf("cout = %d\n", get_net_val(vb->_pin_set.get_pin_net("cout")));
-
-    //    sleep(1);
+    sleep(1);
+    // getchar();
     check_error();
     register_cb_after(main_callback, 1, vb);
     return 0;
 }
 
-void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p) {
+/// wrapper to pass in to leds_change_callback
+/// pin is needed because we need to know what INDEX changed (in case of array)
+typedef struct vb_pin_t {
+    virtual_board* vb;
+    pin* p;
+} vb_pin_t;
+
+void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p,
+                                   virtual_board* vb) {
     s_vpi_time tim = {.type = vpiSuppressTime};
     s_vpi_value val = {.format = vpiSuppressVal};
     s_cb_data cb = {.reason = cbValueChange,
                     .cb_rtn = cb_rtn,
-                    .obj = p->net,
+                    .obj = p->net, // trigger callback when p->net value changes!
                     .time = &tim,
                     .value = &val,
-                    .user_data = (PLI_BYTE8*)p};
+                    // we will need this memory the whole program, so its ok mallocing
+                    .user_data = (PLI_BYTE8*)new vb_pin_t{.vb = vb, .p = p}};
 
     vpiHandle callback_handle = vpi_register_cb(&cb);
     if (!callback_handle)
-        vpi_printf("VPI_ERROR: Cannot register cbValueChange LEDR callback!\n");
+        vpi_printf("VPI_ERROR: Cannot register cbValueChange callback!\n");
     vpi_free_object(callback_handle);
 }
 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
-    pin* p = (pin*)cb_data->user_data;
-    printf("pin changed: ");
-    p->debug_pin();
+    vb_pin_t* vb_pin = (vb_pin_t*)cb_data->user_data;
+    virtual_board* vb = vb_pin->vb;
+    //vb_pin->p->debug_pin();
+
+    if (vb->handler->connections.size() < 1) {
+        // if no peers listening, no point in announce anything..
+        return 0;
+    }
+
+    // auto pin = vb->_pin_set.get_pin(cb_data->obj);
+    // NOTE: this would return the pin with index 0, thats why we are using vb_pin_t here
+    // so we can know what index changed, and send the PIN linked to that index
+
+    pin* pin = vb_pin->p;
+
+    // broadcast to all websocket connections that pin changed
+    vb->ws_sv.execute([vb, pin] {
+        char msg[256];
+        snprintf(msg, sizeof(msg), "%s = %d", pin->id.c_str(), pin->get_value());
+        vb->handler->send_all(msg);
+    });
+
     return 0;
 }
 
@@ -234,6 +267,9 @@ pin_set get_pins_signals(virtual_board& vb,
         int net_width = vpi_get(vpiSize, net);
         int net_dir = vpi_get(vpiDirection, net); // 1 = input (SW), 2 = output (LEDR)
 
+#ifdef DEBUG
+        printf("\t [DBG all signals] %s %d %d\n", net_name, net_width, net_dir);
+#endif
         // TODO: do we only care about Input/Output signals?
         if (net_dir != 1 && net_dir != 2)
             continue;
@@ -241,8 +277,8 @@ pin_set get_pins_signals(virtual_board& vb,
         total_signals++;
 
 #ifdef DEBUG
-        printf("\t [top entity signal debug] %s[%d] = %d (dir=%d)\n", net_name, net_width,
-               get_net_val(net), net_dir);
+        printf("\t [top entity signal debug] %s[%d] = %d (dir=%d) at %x\n", net_name, net_width,
+               get_net_val(net), net_dir, net);
 #endif
 
         // loop pin assignments
@@ -268,7 +304,8 @@ pin_set get_pins_signals(virtual_board& vb,
     }
 
     if (total_pins_found != total_signals) {
-        vpi_printf("VPI_WARNING: There are signals that are not connected to any PIN (%ld/%ld).\n",
+        vpi_printf("VPI_WARNING: THERE ARE SIGNALS THAT ARE NOT CONNECTED TO ANY PIN "
+                   "(connected/total) = (%ld/%ld).\n",
                    total_pins_found, total_signals);
     }
 
