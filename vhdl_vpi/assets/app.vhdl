@@ -13,6 +13,14 @@ END ENTITY;
 
 ARCHITECTURE rtl OF up_counter IS
     SIGNAL count : STD_LOGIC_VECTOR (7 DOWNTO 0) := "00000000";
+
+    COMPONENT UsbPort
+		PORT (
+			inputPort : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+			outputPort : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+		);
+	END COMPONENT;
+
 BEGIN
     PROCESS (clk, reset) BEGIN
         IF (reset = '1') THEN

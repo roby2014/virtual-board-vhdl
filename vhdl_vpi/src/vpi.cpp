@@ -139,6 +139,7 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
 
     //    sleep(1);
     check_error();
+    getchar();
     register_cb_after(main_callback, 1, vb);
     return 0;
 }
@@ -234,9 +235,11 @@ pin_set get_pins_signals(virtual_board& vb,
         int net_width = vpi_get(vpiSize, net);
         int net_dir = vpi_get(vpiDirection, net); // 1 = input (SW), 2 = output (LEDR)
 
+        printf("[DBG] %s %d %d\n", net_name, net_width, net_dir);
         // TODO: do we only care about Input/Output signals?
         if (net_dir != 1 && net_dir != 2)
             continue;
+        printf("-> %s added\n", net_name);
 
         total_signals++;
 

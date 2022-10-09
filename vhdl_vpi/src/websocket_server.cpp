@@ -134,7 +134,7 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         }
 
         auto pin_id = msg[1];
-        if (!vb->_pin_set.pin_exists(pin_id) || !vb->_pin_set.get_pin_value()) {
+        if (!vb->_pin_set.pin_exists(pin_id)) {
             ws.write(net::buffer(std::string("Unknown PIN_ID")));
             return;
         }
