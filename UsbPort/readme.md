@@ -14,7 +14,7 @@ The "emulator" is basically a VPI module running a websocket server and a VHDL s
 In this case, our [new UsbPort implementation](https://github.com/roby2014/board-emulator-vhdl/blob/main/UsbPort/library/src/main/kotlin/isel/leic/UsbPort.kt) will send **custom** commands via the websocket server (`UGET`, `UPUT`), and the server manipulates the UsbPort port signals via GHDL.
 
 
-# What the script for?
+# What is the script for?
 
 The script converts a VHDL circuit that uses the default UsbPort implementation into one that can use the VPI board emulator, so we can manipulate the signals via server (check [#how-its-done](#how-its-done) for more info).
 
