@@ -14,6 +14,7 @@
 #include "utils.hpp"
 #include "virtual_board.hpp"
 #include "websocket_server.hpp"
+#include "vpi.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -112,30 +113,26 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
     auto msg = utils::split(buff, ' '); // separates into tokens
     auto cmd = msg[0];
 
-    if (cmd != "GET" && cmd != "PUT" && cmd != "HELP") {
-        ws.write(net::buffer(std::string("Unknown command, try GET or PUT.\n")));
-        return;
-    }
-
     // HELP
     if (cmd == "HELP") {
-        ws.write(net::buffer(
-            std::string("\nGET <PIN_ID> - returns <PIN_ID> signal value (1/0)"
-                        "\nPUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>\n")));
+        ws.write(
+            net::buffer("\nGET <PIN_ID> - returns <PIN_ID> signal value (1/0)"
+                        "\nPUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>"
+                        "\nUGET - returns UsbPort input port 7 bit value"
+                        "\nUPUT <7bit_val> - changes UsbPort output port value to <7bit_value>\n"));
         return;
     }
 
     // GET <PIN_ID>
     if (cmd == "GET") {
         if (msg.size() != 2) {
-            ws.write(net::buffer(
-                std::string("Usage: GET <PIN_ID> - returns <PIN_ID> signal value (1/0)")));
+            ws.write(net::buffer("Usage: GET <PIN_ID> - returns <PIN_ID> signal value (1/0)"));
             return;
         }
 
         auto pin_id = msg[1];
         if (!vb->_pin_set.pin_exists(pin_id)) {
-            ws.write(net::buffer(std::string("Unknown PIN_ID")));
+            ws.write(net::buffer("Unknown PIN_ID"));
             return;
         }
 
@@ -143,24 +140,74 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         snprintf(response, sizeof(response), "%s = %d", pin_id.c_str(),
                  vb->_pin_set.get_pin_value(pin_id));
         ws.write(net::buffer(std::string(response)));
+        return;
     }
 
     // PUT <PIN_ID> <VALUE>
     if (cmd == "PUT") {
         if (msg.size() != 3) {
-            ws.write(net::buffer(std::string(
-                "Usage: PUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>")));
+            ws.write(net::buffer(
+                "Usage: PUT <PIN_ID> <VALUE> - changes <PIN_ID> signal value to <VALUE>"));
             return;
         }
 
         auto pin_id = msg[1];
         if (!vb->_pin_set.pin_exists(pin_id)) {
-            ws.write(net::buffer(std::string("Unknown PIN_ID")));
+            ws.write(net::buffer("Unknown PIN_ID"));
             return;
         }
 
         auto value = msg[2] != "0";
         auto pin = vb->_pin_set.get_pin_net(pin_id);
         vb->_events.push(board_event{pin, value});
+        return;
     }
+
+    // UGET
+    if (cmd == "UGET") {
+        char signal_name[128];
+        snprintf(signal_name, sizeof(signal_name), "%s.inputport_sw", vb->_top_ent_name.c_str());
+        auto input_port_ptr = vpi_handle_by_name(signal_name, NULL);
+        if (input_port_ptr == nullptr) {
+            ws.write(net::buffer(
+                "Current project does not support UsbPort via VPI+GHDL (inputport_sw not found)"));
+            return;
+        }
+
+        char response[64];
+        snprintf(response, sizeof(response), "%d", vpi::get_net_val(input_port_ptr));
+        ws.write(net::buffer(std::string(response)));
+        return;
+    }
+
+    // UPUT <7bit_value>
+    if (cmd == "UPUT") {
+        if (msg.size() != 2) {
+            ws.write(net::buffer("Usage: UPUT <7bit_value> <VALUE> - changes UsbPort "
+                                 "output values to <7bit_value>"));
+            return;
+        }
+
+        auto val = std::atoi(msg[1].c_str());
+        if (val > 0b1111111) {
+            ws.write(net::buffer("Value bigger than 7 bits"));
+            return;
+        }
+
+        char signal_name[128];
+        snprintf(signal_name, sizeof(signal_name), "%s.outputport_sw", vb->_top_ent_name.c_str());
+        auto output_port_ptr = vpi_handle_by_name(signal_name, NULL);
+        if (output_port_ptr == nullptr) {
+            ws.write(net::buffer(
+                "Current project does not support UsbPort via VPI+GHDL (outputport_sw not found)"));
+            return;
+        }
+
+        vpi::set_net_val(output_port_ptr, val);
+        ws.write(net::buffer(std::to_string(val)));
+        return;
+    }
+
+    ws.write(net::buffer("Unknown command, try 'HELP'\n"));
+    return;
 }

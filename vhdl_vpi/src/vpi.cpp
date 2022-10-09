@@ -135,7 +135,13 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
 #endif
     }
 
-    printf("cout = %d\n", get_net_val(vb->_pin_set.get_pin_net("cout")));
+    printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
+    printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
+    set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
+    // printf("inputport = %x\n", vpi_handle_by_name("up_counter.inputport_sw", NULL));
+    // printf("outputport = %x\n", get_net_val(vpi_handle_by_name("up_counter.outputport_sw",
+    // NULL)));
 
     //    sleep(1);
     check_error();
@@ -236,16 +242,21 @@ pin_set get_pins_signals(virtual_board& vb,
         int net_dir = vpi_get(vpiDirection, net); // 1 = input (SW), 2 = output (LEDR)
 
         printf("[DBG] %s %d %d\n", net_name, net_width, net_dir);
+
+        if (std::string(net_name) == "outputport_sw") {
+            printf("aquiiii : %d\n", get_net_val(net));
+        }
+
         // TODO: do we only care about Input/Output signals?
         if (net_dir != 1 && net_dir != 2)
             continue;
-        printf("-> %s added\n", net_name);
+        printf("\t-> %s added\n", net_name);
 
         total_signals++;
 
 #ifdef DEBUG
-        printf("\t [top entity signal debug] %s[%d] = %d (dir=%d)\n", net_name, net_width,
-               get_net_val(net), net_dir);
+        printf("\t [top entity signal debug] %s[%d] = %d (dir=%d) at %x\n", net_name, net_width,
+               get_net_val(net), net_dir, net);
 #endif
 
         // loop pin assignments
