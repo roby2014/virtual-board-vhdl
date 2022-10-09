@@ -3,6 +3,8 @@
 
 ## Board emulator for VHDL code simulation
 
+<img src="assets/goal.svg">
+
 This project aims to allow simulating VHDL circuits on a board emulator (so you dont need the "real" FPGA board).
 
 The VHDL simulation is done via [GHDL](https://github.com/ghdl/ghdl), which runs a [`.vpi`](https://en.wikipedia.org/wiki/Verilog_Procedural_Interface) module built by `g++` from the [C++ code](https://github.com/roby2014/board-emulator-vhdl/tree/main/vhdl_vpi).
@@ -11,9 +13,9 @@ The board IO pins (leds, buttons, switches, hex displays, etc...) can be set/con
 
 It also has a websocket server implemented which means it is easy to access to all the pins/signals via other applications, this will make the interface implementation process way easier.
 
-[Here (gui_interface)](https://github.com/roby2014/board-emulator-vhdl/tree/main/gui_interface) is a quick UI prototype built with C++ to show what a board interface can look like.
+One of the goals is also to add compatibility with [UsbPort], which is a "communication" method that allows students to manipulate their VHDL circuit signals via a Kotlin/Java application.
 
-*Soon I will show examples/documentate how the configuration is made, communication protocol works, etc..*
+[Here (gui_interface)](https://github.com/roby2014/board-emulator-vhdl/tree/main/gui_interface) is a quick UI prototype built with C++ to show what a board interface can look like.
 
 ## Credits
 - [GHDL](https://github.com/ghdl/ghdl) - VHDL 2008/93/87 simulator
