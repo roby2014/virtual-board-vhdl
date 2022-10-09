@@ -14,7 +14,7 @@ ENTITY up_counter IS
 END ENTITY;
 
 ARCHITECTURE rtl OF up_counter IS
-    COMPONENT UsbPort_GHDL
+    COMPONENT UsbPort_VPI_GHDL
         PORT (
 -- Automated Inserted code for VPI_GHDL
     inputPort_SW : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);

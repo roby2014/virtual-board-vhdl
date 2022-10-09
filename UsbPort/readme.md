@@ -18,16 +18,16 @@ In this case, our [new UsbPort implementation](https://github.com/roby2014/board
 
 The script converts a VHDL circuit that uses the default UsbPort implementation into one that can use the VPI board emulator, so we can manipulate the signals via server (check [#how-its-done](#how-its-done) for more info).
 
-## UsbPort via JTAG
+# UsbPort via JTAG
 
 <img src="../assets/usbport_via_jtag.svg">
 
 
-## UsbPort via emulator
+# UsbPort via emulator
 
 <img src="../assets/usbport_goal.svg">
 
-## How it's done
+# How it's done
 
 Assuming we have a VHDL circuit which uses default UsbPort implementation (via [JTAG](https://www.fpga4fun.com/JTAG.html)), we need to change some things in order to emulate it 100%, such as: 
 - Overwrite the component, because with the GHDL simulation, the UsbPort will communicate with the server instead
