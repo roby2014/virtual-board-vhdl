@@ -79,14 +79,14 @@ top_entity_name = str(args["top_entity_name"])
 # check if UsbPort default exists
 usb_port_path = vhdl_dir + "/UsbPort.vhd"
 if os.path.exists(usb_port_path) == False:
-    print("[-] File '{}' does not exist...".format(usb_port_path))
+    print("[-] file '{}' does not exist...".format(usb_port_path))
     exit(1)
 
 #
 # get top entity file data
 top_entity_file_path = vhdl_dir + "/" + top_entity_file
 if os.path.exists(top_entity_file_path) == False:
-    print("[-] Top file entity '{}' does not exist...".format(top_entity_file_path))
+    print("[-] top file entity '{}' does not exist...".format(top_entity_file_path))
     exit(1)
 
 fp = open(top_entity_file_path, "r")
@@ -101,7 +101,7 @@ match = re.search(
     flags=re.S | re.I,
 )
 if match == None:
-    print("[-] Top entity '{}' does not exist...".format(top_entity_name))
+    print("[-] top entity '{}' does not exist...".format(top_entity_name))
     exit(1)
 
 new_top_entity = match.group(0) + USB_PORT_DECLARATION
@@ -118,7 +118,7 @@ print("[+] added {} signals to top entity {}".format(NEW_USB_PORT_NAME, top_enti
 match = re.search(USB_PORT_COMPONENT_REGEX, new_data, flags=re.S | re.I)
 if match == None:
     print(
-        "[-] Top entity '{}' does not have a valid UsbPort port map instantiation...".format(top_entity_name)
+        "[-] top entity '{}' does not have a valid UsbPort port map instantiation...".format(top_entity_name)
     )
     exit(1)
 
@@ -130,7 +130,7 @@ new_data = re.sub(
     new_data,
     flags=re.S | re.I,
 )
-print("[+] Old UsbPort component declaration replaced by {}".format(NEW_USB_PORT_NAME))
+print("[+] old UsbPort component declaration replaced by {}".format(NEW_USB_PORT_NAME))
 
 
 #
@@ -138,7 +138,7 @@ print("[+] Old UsbPort component declaration replaced by {}".format(NEW_USB_PORT
 match = re.search(USB_PORT_MAP_REGEX, new_data, flags=re.S|re.I)
 if match == None:
     print(
-        "[-] Top entity '{}' does not have a valid UsbPort port map instantiation...".format(
+        "[-] top entity '{}' does not have a valid UsbPort port map instantiation...".format(
             top_entity_name
         )
     )
@@ -152,7 +152,7 @@ new_data = re.sub(
     new_data,
     flags=re.S | re.I,
 )
-print("[+] New UsbPort_SW signals linked")
+print("[+] new UsbPort SW signals linked")
 
 #
 # Create new UsbPort file

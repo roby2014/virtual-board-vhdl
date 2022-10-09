@@ -10,11 +10,11 @@ object UsbPort {
     }
 
     /** Writes [data] into UsbPort output. */
-    fun write(data: Int) = conn.send("USBPORT_PUT $data")
+    fun write(data: Int) = conn.send("UPUT $data")
 
     /** Returns UsbPort input bits. */
     fun read(): Int {
-        conn.send("USBPORT_GET")
+        conn.send("UGET")
         return conn.getFutureResponse().toInt()
     }
 }
