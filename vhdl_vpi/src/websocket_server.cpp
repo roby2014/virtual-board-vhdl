@@ -204,7 +204,6 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         }
 
         vpi::set_net_val(output_port_ptr, val);
-        ws.write(net::buffer(std::to_string(val)));
         return;
     }
 

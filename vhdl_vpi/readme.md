@@ -30,7 +30,13 @@ Communication protocol:
 ```
 GET <PIN_ID> - returns pin's signal value (1/0)
 PUT <PIN_ID> <VALUE> - puts pin's signal value to value
+UGET - returns UsbPort input port 7 bit value
+UPUT <7bit_value> - changes UsbPort output port value to <7bit_value>
 ```
+
+## UsbPort
+
+In order to use `UGET` and `UPUT`, the project must support UsbPort via GHDL+VPI. When using these commands, the server will check if there is any `inputport_sw` or `outputport_sw` signal available on the simulation (which means it supports), if yes, the commands succeed, if not, returns an error message.
 
 # Test and run
 

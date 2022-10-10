@@ -4,8 +4,10 @@ import re
 import shutil
 
 parser = argparse.ArgumentParser(
-    description="Converts a VHDL circuit that uses the default UsbPort implementation into one that can use the VPI board emulator."
+    description="Converts a VHDL circuit that uses the default UsbPort implementation (via JTAG) into one that can use the VPI+GHDL one."
 )
+
+# TODO: generate a new Makefile / update the old one with the new files
 
 # python3 usb_port_vpi_ghdl.py --vhdl_dir . source.vhd up_counter
 

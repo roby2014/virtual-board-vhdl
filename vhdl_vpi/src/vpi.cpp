@@ -69,6 +69,12 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
                        assignment.pin.c_str());
             exit(EXIT_FAILURE);
         }
+        // TODO: is this correct
+        if (assignment.signal_dst == "outputport_sw" || assignment.signal_dst == "inputport_sw") {
+            vpi_printf("VPI_ERROR: PIN assigning UsbPorts (outputport_sw/inputport_sw) is not "
+                       "permitted.\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     virtual_board* vb = new virtual_board();
@@ -143,9 +149,8 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     // printf("outputport = %x\n", get_net_val(vpi_handle_by_name("up_counter.outputport_sw",
     // NULL)));
 
-    //    sleep(1);
+    sleep(1);
     check_error();
-    getchar();
     register_cb_after(main_callback, 1, vb);
     return 0;
 }
@@ -241,12 +246,9 @@ pin_set get_pins_signals(virtual_board& vb,
         int net_width = vpi_get(vpiSize, net);
         int net_dir = vpi_get(vpiDirection, net); // 1 = input (SW), 2 = output (LEDR)
 
+#ifdef DEBUG
         printf("[DBG] %s %d %d\n", net_name, net_width, net_dir);
-
-        if (std::string(net_name) == "outputport_sw") {
-            printf("aquiiii : %d\n", get_net_val(net));
-        }
-
+#endif
         // TODO: do we only care about Input/Output signals?
         if (net_dir != 1 && net_dir != 2)
             continue;

@@ -5,17 +5,20 @@ import org.java_websocket.handshake.ServerHandshake
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 
-internal class WebSocketClient(url: String) : WebSocketClient(URI(url)) {
-    private val responseFuture = CompletableFuture<String>()
 
-    /** Returns future's response */
-    fun getFutureResponse(): String = responseFuture.get()
+internal class WebSocketClient(url: String) : WebSocketClient(URI(url)) {
+    var future = CompletableFuture<String>()
+
+    fun getResponse(): String {
+        future = CompletableFuture<String>()
+        return future.get()
+    }
 
     override fun onOpen(handshakedata: ServerHandshake) {
     }
 
     override fun onMessage(message: String) {
-        responseFuture.complete(message);
+        future.complete(message)
     }
 
     override fun onClose(code: Int, reason: String, remote: Boolean) {
