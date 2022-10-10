@@ -1,6 +1,6 @@
 # What is UsbPort?
 
-UsbPort is a "communication" method that allows students to manipulate their VHDL circuit signals via a Kotlin/Java application.
+UsbPort is a "communication" method that allows manipulating VHDL circuit signals via a Kotlin/Java application.
 The default UsbPort implementation communicates with the VHDL circuit via [JTAG](https://www.fpga4fun.com/JTAG.html).
 UsbPort can only read or write 7 bits to the port (via `UsbPort.read()` or `UsbPort.write(val)`).
 
@@ -11,7 +11,7 @@ UsbPort can only read or write 7 bits to the port (via `UsbPort.read()` or `UsbP
 # Plan
 
 The "emulator" is basically a VPI module running a websocket server and a VHDL simulator (GHDL) in separate threads.
-In this case, our [new UsbPort implementation](https://github.com/roby2014/board-emulator-vhdl/blob/main/UsbPort/library/src/main/kotlin/isel/leic/UsbPort.kt) will send **custom** commands via the websocket server (`UGET`, `UPUT`), and the server manipulates the UsbPort port signals via GHDL.
+In this case, our [new UsbPort implementation](https://github.com/roby2014/virtual-board-vhdl/blob/main/UsbPort/library/src/main/kotlin/isel/leic/UsbPort.kt) will send **custom** commands via the websocket server (`UGET`, `UPUT`), and the server manipulates the UsbPort port signals via GHDL.
 
 
 # What is the script for?
@@ -33,7 +33,7 @@ Assuming we have a VHDL circuit which uses default UsbPort implementation (via [
 - Overwrite the component, because with the GHDL simulation, the UsbPort will communicate with the server instead
 - Add UsbPort ports to top entity so we can use GHDL to manipulate signals via UsbPort
 
-We will do this via a python script ([usb_port_vpi_ghdl.py](https://github.com/roby2014/board-emulator-vhdl/blob/main/UsbPort/script/usb_port_vpi_ghdl.py)).
+We will do this via a python script ([usb_port_vpi_ghdl.py](https://github.com/roby2014/virtual-board-vhdl/blob/main/UsbPort/script/usb_port_vpi_ghdl.py)).
 
 So, `UsbPort.vhd` is moved to a temporary folder, and `UsbPort_VPI_GHDL.vhd` is now used:
 
