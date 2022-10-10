@@ -6,16 +6,16 @@ If you want to test other VHDL code, you have to change `VHDL_FILES` and `EXEC_T
 
 # Configuration
 
-You can configure your board PIN Set inside [`assets/board.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/board.cfg) and the signals assignments inside [`assets/assignments.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/assignments.cfg).
+You can configure your board PIN Set inside [`assets/board.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/board.cfg) and the signals assignments inside [`assets/assignments.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/assignments.cfg).
 For more info read: 
 
 ## Custom PIN Set board configuration
-This emulator allows having a custom PIN set, to add your desired pins, edit [`assets/board.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/board.cfg).
+This emulator allows having a custom PIN set, to add your desired pins, edit [`assets/board.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/board.cfg).
 Each pin should have a `pin_name`, `pin_id` and its `index`.
 For now, only `leds`, `switches`, (`hex` and `buttons` in the future) are allowed.
 
 ## Signal assignments
-To assign your top entity VHDL signals to board PINS, edit [`assets/assignments.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/assignments.cfg).
+To assign your top entity VHDL signals to board PINS, edit [`assets/assignments.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/assignments.cfg).
 The configuration should look pretty obvious if you open the file, but just in case, this is how it's done:
 ```
 // This is a comment

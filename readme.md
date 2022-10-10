@@ -1,21 +1,30 @@
 ### ⚠️ PROJECT UNDER DEVELOPMENT ⚠️
 *do not expect good documentation, clean and working code (for now)*
 
-## Board emulator for VHDL code simulation
+## Virtual Board for VHDL code simulation
+
+This project aims to allow VHDL simulation on a "virtual board" (so a FPGA board won't be required), in a more friendly way (so you won't need to look at waveforms again!).
 
 <img src="assets/goal.svg">
 
-This project aims to allow simulating VHDL circuits on a board emulator (so you dont need the "real" FPGA board).
+*(It's not an emulator since it won't emulate 100% real hardware)*
 
-The VHDL simulation is done via [GHDL](https://github.com/ghdl/ghdl), which runs a [`.vpi`](https://en.wikipedia.org/wiki/Verilog_Procedural_Interface) module built by `g++` from the [C++ code](https://github.com/roby2014/board-emulator-vhdl/tree/main/vhdl_vpi).
+## VPI
 
-The board IO pins (leds, buttons, switches, hex displays, etc...) can be set/configured via configuration file ([`assets/board.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/board.cfg)) and the signals assignments can be configured inside [`assets/assignments.cfg`](https://github.com/roby2014/de10-emulator/blob/main/vhdl_vpi/assets/assignments.cfg).
+The VHDL simulation is done via [GHDL](https://github.com/ghdl/ghdl), which runs a [`.vpi`](https://en.wikipedia.org/wiki/Verilog_Procedural_Interface) module built by `g++`.
 
-It also has a websocket server implemented which means it is easy to access to all the pins/signals via other applications, this will make the interface implementation process way easier.
+We can manipulate the simulation signals via a websocket server, customize board IO pins and also assign signals to those pins, [read more about the VPI module here](https://github.com/roby2014/virtual-board-vhdl/tree/main/vhdl_vpi).
 
-One of the goals is also to add compatibility with [UsbPort], which is a "communication" method that allows students to manipulate their VHDL circuit signals via a Kotlin/Java application.
 
-[Here (gui_interface)](https://github.com/roby2014/board-emulator-vhdl/tree/main/gui_interface) is a quick UI prototype built with C++ to show what a board interface can look like.
+## UsbPort
+
+One of the goals is also to add compatibility with [UsbPort](https://github.com/roby2014/virtual-board-vhdl/tree/main/UsbPort), which is a "communication" method that allows manipulating VHDL circuit signals via a Kotlin/Java application.
+
+## Board UI
+
+Since it has a websocket server, it won't be hard to display signals in a "pretty" way to the user.
+
+[Here (gui_interface)](https://github.com/roby2014/virtual-board-vhdl/tree/main/gui_interface) is a quick UI prototype built with C++ to show what a board interface can look like.
 
 ## Credits
 - [GHDL](https://github.com/ghdl/ghdl) - VHDL 2008/93/87 simulator
@@ -23,3 +32,4 @@ One of the goals is also to add compatibility with [UsbPort], which is a "commun
 - [libconfig](http://hyperrealm.github.io/libconfig/) - Library for processing structured configuration files
 - [beast](https://github.com/boostorg/beast) - HTTP and WebSocket built on Boost.Asio in C++11 
 - [ultralight](https://github.com/ultralight-ux/ultralight) - Next-generation HTML renderer for apps and games (C++)
+- [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket) - A barebones WebSocket client and server implementation written in 100% Java.
