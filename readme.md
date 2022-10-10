@@ -5,7 +5,7 @@
 
 This project aims to allow VHDL simulation on a "virtual board" (so a FPGA board won't be required), in a more friendly way (so you won't need to look at waveforms again!).
 
-<img src="assets/goal.svg">
+<img src="https://raw.githubusercontent.com/roby2014/virtual-board-vhdl/856c1c31d2f5c50f8d085fb1e3790fd1008b4324/assets/goal.svg">
 
 *(It's not an emulator since it won't emulate 100% real hardware)*
 
