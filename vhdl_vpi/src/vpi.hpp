@@ -29,8 +29,10 @@ PLI_INT32 cb_init(p_cb_data cb_data);
 /// Main simulation callback
 PLI_INT32 main_callback(p_cb_data cb_data);
 
-/// Registers pin [p]'s value change, setting [cb_rtn] as calback
-void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p);
+/// Registers pin [p]'s value change, setting [cb_rtn] as callback
+/// vb is also sent so we can broadcast to websocket connections that the pin changed..
+void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p,
+                                   virtual_board* vb);
 
 /// Callback called when any pin changes
 /// Pin information is [cb_data->user_data]

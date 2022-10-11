@@ -10,11 +10,12 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven(url = "https://jitpack.io")
 }
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.java-websocket:Java-WebSocket:1.5.3")
+    implementation("com.github.jkcclemens:khttp:0.1.0")
 }
 
 tasks.test {

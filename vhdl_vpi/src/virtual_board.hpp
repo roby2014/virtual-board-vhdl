@@ -8,7 +8,7 @@
 /// Represents a pin value change
 /// Stores a pointer to the pin that changed, and its new value
 typedef struct event {
-    vpiHandle pin_net;
+    pin* pin_ptr;
     bool new_value;
 } board_event;
 
@@ -18,6 +18,13 @@ public:
     std::string _top_ent_name;
     pin_set _pin_set;
     std::queue<board_event> _events;
+
+    // TODO: get these via config file on constructor
+    std::string host;
+    int ws_port;
+    int http_port;
+
+    virtual_board();
 
     void debug() const {
         printf("[debug] PIN SET:\n");

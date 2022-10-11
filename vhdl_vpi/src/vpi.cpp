@@ -6,6 +6,7 @@
 #include "board_config.hpp"
 #include "virtual_board.hpp"
 #include "websocket_server.hpp"
+#include "http_server.hpp"
 
 #define DEBUG
 
@@ -88,7 +89,8 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     return 0;
 }
 
-PLI_INT32 cb_simulation_end(p_cb_data cb_data __attribute__((unused))) {
+PLI_INT32 cb_simulation_end(p_cb_data cb_data) {
+    (void)cb_data; // unused parameter compiler warning
     vpi_printf("END OF SIMULATION\n");
     return 0;
 }
@@ -96,26 +98,18 @@ PLI_INT32 cb_simulation_end(p_cb_data cb_data __attribute__((unused))) {
 PLI_INT32 cb_init(p_cb_data cb_data) {
     virtual_board* vb = (virtual_board*)cb_data->user_data;
 
-    std::thread(ws_sv::open_ws_server, vb).detach(); // open websocket server in a separate thread
+    // open websocket & http server in a separate thread
+    std::thread(ws_sv::open_ws_server, vb).detach();
+    std::thread(http_sv::open_http_server, vb).detach();
 
-    static int startup_cnt = 0;
-
-    switch (startup_cnt) {
-    case 0:
-        // register linked pins values change event
-
-        for (auto& p : vb->_pin_set.pins) {
-            register_pins_value_change_cb(on_pins_value_change, &p);
-        }
-
-        register_cb_after(main_callback, CLK_SPEED, vb);
-        break;
-
-    default:
-        vpi_printf("VPI_ERROR: cb_init UB\n");
+    // register linked pins values change event
+    for (auto& p : vb->_pin_set.pins) {
+        register_pins_value_change_cb(on_pins_value_change, &p, vb);
     }
 
-    startup_cnt++;
+    // register main callback (loop)
+    register_cb_after(main_callback, CLK_SPEED, vb);
+
     return 0;
 }
 
@@ -129,21 +123,9 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     set_net_val(vb->_pin_set.get_pin_net("clk"), test);
     test = !test;
 
-    // check if any pin change event occurred in the other thread (via websocket)
-    auto& q = vb->_events;
-    while (!q.empty()) {
-        auto pin_net = q.front().pin_net;
-        auto new_value = q.front().new_value;
-        set_net_val(pin_net, new_value);
-        q.pop();
-#ifdef DEBUG
-        vpi_printf("\t CHANGING %p VALUE TO %d \n", pin_net, new_value);
-#endif
-    }
-
-    printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
-    printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
-    printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
+    // printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
+    // printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    // printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
     set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
     // printf("inputport = %x\n", vpi_handle_by_name("up_counter.inputport_sw", NULL));
     // printf("outputport = %x\n", get_net_val(vpi_handle_by_name("up_counter.outputport_sw",
@@ -155,7 +137,8 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     return 0;
 }
 
-void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p) {
+void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p,
+                                   virtual_board* vb) {
     s_vpi_time tim = {.type = vpiSuppressTime};
     s_vpi_value val = {.format = vpiSuppressVal};
     s_cb_data cb = {.reason = cbValueChange,
@@ -163,18 +146,24 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
                     .obj = p->net,
                     .time = &tim,
                     .value = &val,
-                    .user_data = (PLI_BYTE8*)p};
+                    .user_data = (PLI_BYTE8*)vb};
 
     vpiHandle callback_handle = vpi_register_cb(&cb);
     if (!callback_handle)
-        vpi_printf("VPI_ERROR: Cannot register cbValueChange LEDR callback!\n");
+        vpi_printf("VPI_ERROR: Cannot register cbValueChange callback!\n");
     vpi_free_object(callback_handle);
 }
 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
-    pin* p = (pin*)cb_data->user_data;
+    virtual_board* vb = (virtual_board*)cb_data->user_data;
+    vpiHandle pin_changed_ptr = (vpiHandle)cb_data->obj;
+    auto pin = vb->_pin_set.get_pin(pin_changed_ptr);
+
     printf("pin changed: ");
-    p->debug_pin();
+    pin->debug_pin();
+
+    // broadcast to all websocket connections that pin changed
+    vb->_events.push(board_event{pin, pin->get_value() ? true : false});
     return 0;
 }
 

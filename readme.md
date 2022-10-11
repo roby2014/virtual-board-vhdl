@@ -5,7 +5,7 @@
 
 This project aims to allow VHDL simulation on a "virtual board" (so a FPGA board won't be required), in a more friendly way (so you won't need to look at waveforms again!).
 
-<img src="https://raw.githubusercontent.com/roby2014/virtual-board-vhdl/856c1c31d2f5c50f8d085fb1e3790fd1008b4324/assets/goal.svg">
+<img src="./assets/final_goal.drawio.png">
 
 *(It's not an emulator since it won't emulate 100% real hardware)*
 
@@ -31,5 +31,6 @@ Since it has a websocket server, it won't be hard to display signals in a "prett
 - [ghdl-cosim](https://ghdl.github.io/ghdl-cosim/vpi/examples/index.html) - GHDL co-simulation projects using VPI
 - [libconfig](http://hyperrealm.github.io/libconfig/) - Library for processing structured configuration files
 - [beast](https://github.com/boostorg/beast) - HTTP and WebSocket built on Boost.Asio in C++11 
+- [cpp-httplib](https://github.com/yhirose/cpp-httplib) - A C++ header-only HTTP/HTTPS server and client library 
+- [khttp](https://github.com/ascclemens/khttp) - Kotlin HTTP requests library
 - [ultralight](https://github.com/ultralight-ux/ultralight) - Next-generation HTML renderer for apps and games (C++)
-- [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket) - A barebones WebSocket client and server implementation written in 100% Java.

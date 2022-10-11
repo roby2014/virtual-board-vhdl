@@ -34,17 +34,14 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
 namespace ws_sv {
 
 void open_ws_server(virtual_board* vb) {
-    printf("Opening Websocket server... ( ws://127.0.0.1:8083 )\n");
+    printf("Opening Websocket server... ( ws://%s:%d )\n", vb->host.c_str(), vb->ws_port);
     try {
-        // TODO: no hardcoded values (make it via cfg file?)
-        auto const address = net::ip::make_address("127.0.0.1");
-        auto const port = 8083;
-
         // The io_context is required for all I/O
         net::io_context ioc{1};
 
         // The acceptor receives incoming connections
-        tcp::acceptor acceptor{ioc, {address, port}};
+        tcp::acceptor acceptor{
+            ioc, {net::ip::make_address(vb->host), (boost::asio::ip::port_type)vb->ws_port}};
         for (;;) {
             // This will receive the new connection
             tcp::socket socket{ioc};
@@ -79,26 +76,18 @@ void do_session(tcp::socket socket, virtual_board* vb) {
         // Accept the websocket handshake
         ws.accept();
 
-        printf("New websocket connection, waiting for messages ...\n");
+        printf("New websocket connection...\n");
 
+        printf("entra no pipe\n");
         for (;;) {
-            // This buffer will hold the incoming message
-            beast::flat_buffer buffer;
-            // Blocks and waits for message
-            ws.read(buffer);
-
-            // Echo the message back
-            ws.text(ws.got_text());
-
-            auto a = beast::buffers_to_string(buffer.data());
-            handle_ws_msg(ws, a, vb);
+            // FIXME: websocket should announce when a ping changed...
         }
     } catch (beast::system_error const& se) {
         // This indicates that the session was closed
         if (se.code() != websocket::error::closed)
-            std::cerr << "Error: " << se.code().message() << std::endl;
+            std::cerr << "Websocket error: " << se.code().message() << std::endl;
     } catch (std::exception const& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Websocket error: " << e.what() << std::endl;
     }
 }
 
@@ -158,8 +147,8 @@ void handle_ws_msg(websocket::stream<tcp::socket>& ws, std::string& buff, virtua
         }
 
         auto value = msg[2] != "0";
-        auto pin = vb->_pin_set.get_pin_net(pin_id);
-        vb->_events.push(board_event{pin, value});
+        auto p = vb->_pin_set.get_pin_net(pin_id);
+        // vb->_events.push(board_event{p, value});
         return;
     }
 

@@ -30,8 +30,6 @@ Communication protocol:
 ```
 GET <PIN_ID> - returns pin's signal value (1/0)
 PUT <PIN_ID> <VALUE> - puts pin's signal value to value
-UGET - returns UsbPort input port 7 bit value
-UPUT <7bit_value> - changes UsbPort output port value to <7bit_value>
 ```
 
 ## UsbPort

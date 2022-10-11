@@ -5,16 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe087da4-cbaf-410a-942a-e4e9b453ae67" name="Changes" comment="made `responseFuture` prop private, and implemented `getFutureResponse`">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../assets/final_goal.drawio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../assets/old_goal.drawio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../assets/usbport.drawio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../assets/usbport_goal.drawio.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../assets/usbport_via_jtag.drawio.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/leic/UsbPort.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/leic/UsbPort.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/leic/WebSocketClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/leic/WebSocketClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/leic/WebSocketClient.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/../readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../assets/goal.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../assets/usbport.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../assets/usbport_goal.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../assets/usbport_via_jtag.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/assets/app_tb.vhdl" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/assets/app_tb.vhdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/assets/assignments.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/assets/assignments.cfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/assets/test1/UsbPort_VPI_GHDL.vhd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/assets/test1/app.vhdl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/assets/test1/app_tb.vhdl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/compile_time.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/compile_time.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/src/virtual_board.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/src/virtual_board.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/src/vpi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/src/vpi.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../vhdl_vpi/src/websocket_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../vhdl_vpi/src/websocket_server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +65,11 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/home/roby/repos/virtual-board-vhdl/UsbPort/library"
+    "last_opened_file_path": "/home/roby/repos/virtual-board-vhdl/UsbPort/library",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "configurable.group.build"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -82,6 +102,8 @@
       <workItem from="1665079401086" duration="5461000" />
       <workItem from="1665233786794" duration="51000" />
       <workItem from="1665357985483" duration="1976000" />
+      <workItem from="1665438259488" duration="1522000" />
+      <workItem from="1665443628938" duration="803000" />
     </task>
     <task id="LOCAL-00001" summary="added base project">
       <created>1665085053820</created>
@@ -118,5 +140,9 @@
     <MESSAGE value="added base project" />
     <MESSAGE value="added `UsbPort` and `WebSocketClient` classes" />
     <option name="LAST_COMMIT_MESSAGE" value="added `UsbPort` and `WebSocketClient` classes" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

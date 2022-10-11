@@ -1,4 +1,4 @@
-VHDL_FILES = assets/test1/app.vhdl assets/test1/UsbPort_VPI_GHDL.vhd # all vhdl files to analyze
+VHDL_FILES = assets/app.vhdl assets/UsbPort_VPI_GHDL.vhd # all vhdl files to analyze
 EXEC_TOP_UNIT = up_counter 		# top entity name
 
 SRC		= $(shell find ./src/ -name "*.cpp")

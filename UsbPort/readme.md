@@ -4,14 +4,14 @@ UsbPort is a "communication" method that allows manipulating VHDL circuit signal
 The default UsbPort implementation communicates with the VHDL circuit via [JTAG](https://www.fpga4fun.com/JTAG.html).
 UsbPort can only read or write 7 bits to the port (via `UsbPort.read()` or `UsbPort.write(val)`).
 
-<img src="../assets/usbport.svg">
+<img src="../assets/usbport.drawio.png">
 
 :x: The problem with this implementation is that [JTAG](https://www.fpga4fun.com/JTAG.html) depends on a real FPGA board, and since this project aims to "emulate" that, we need to find another way to allow signal manipulation via the Kotlin/Java application.
 
 # Plan
 
 The "emulator" is basically a VPI module running a websocket server and a VHDL simulator (GHDL) in separate threads.
-In this case, our [new UsbPort implementation](https://github.com/roby2014/virtual-board-vhdl/blob/main/UsbPort/library/src/main/kotlin/isel/leic/UsbPort.kt) will send **custom** commands via the websocket server (`UGET`, `UPUT`), and the server manipulates the UsbPort port signals via GHDL.
+In this case, our [new UsbPort implementation](https://github.com/roby2014/virtual-board-vhdl/blob/main/UsbPort/library/src/main/kotlin/isel/leic/UsbPort.kt) will send **custom** HTTP requests.
 
 
 # What is the script for?
@@ -20,12 +20,12 @@ The script converts a VHDL circuit that uses the default UsbPort implementation 
 
 # UsbPort via JTAG
 
-<img src="../assets/usbport_via_jtag.svg">
+<img src="../assets/usbport_via_jtag.drawio.png">
 
 
 # UsbPort via emulator
 
-<img src="../assets/usbport_goal.svg">
+<img src="../assets/usbport_goal.drawio.png">
 
 # How it's done
 
