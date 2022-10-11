@@ -16,14 +16,14 @@ In this case, our [new UsbPort implementation](https://github.com/roby2014/virtu
 
 # What is the script for?
 
-The script converts a VHDL circuit that uses the default UsbPort implementation into one that can use the VPI board emulator, so we can manipulate the signals via server (check [#how-its-done](#how-its-done) for more info).
+The script converts a VHDL circuit that uses the default UsbPort implementation into one that can use the GHDL+VPI virtual board, so we can manipulate the signals via server (check [#how-its-done](#how-its-done) for more info).
 
 # UsbPort via JTAG
 
 <img src="../assets/usbport_via_jtag.drawio.png">
 
 
-# UsbPort via emulator
+# UsbPort via GHDL+VPI
 
 <img src="../assets/usbport_goal.drawio.png">
 

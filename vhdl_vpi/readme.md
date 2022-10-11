@@ -26,15 +26,25 @@ PIN_A9 -> COUT
 ```
 
 ## Websocket server
-Communication protocol:
+
+Everytime a signal/pin value changes, the websocket server sends a message to all its clients connected. 
+
+Let's suppose `PIN_A9` changed to 1, this is what the server will send to its peers:
 ```
-GET <PIN_ID> - returns pin's signal value (1/0)
-PUT <PIN_ID> <VALUE> - puts pin's signal value to value
+PIN_A9 = 1
 ```
 
 ## UsbPort
 
-In order to use `UGET` and `UPUT`, the project must support UsbPort via GHDL+VPI. When using these commands, the server will check if there is any `inputport_sw` or `outputport_sw` signal available on the simulation (which means it supports), if yes, the commands succeed, if not, returns an error message.
+The HTTP server is opened if `inputport_sw` and `outputport_sw` are valid signals on the simulation top entity.
+
+```
+GET /usbport/inputport_sw
+
+PUT /usbport/outputport_sw
+params: value (7 bit value)
+```
+
 
 # Test and run
 
