@@ -11,10 +11,11 @@ TARGET  = virtual_board.vpi
 CXX      	= g++
 CXXFLAGS 	= -W -Wall -Wextra -std=c++2a -fPIC -pthread
 CXXFLAGS 	+= -Wno-write-strings -Wno-missing-field-initializers -Wno-format
-LIBRARIES  	= -lm -lconfig++
+LIBRARIES  	= -lm -lconfig++ -L/home/roby/seasocks/build/src/main/c/ -lseasocks
 
 # TODO: better way of doing this
-INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg
+# TODO: seasocks on makefile project...
+INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg -I/home/roby/seasocks/src/main/c/
 
 GHDL     = ghdl
 GHDLLD   = $(GHDL) --vpi-link $(CXX)

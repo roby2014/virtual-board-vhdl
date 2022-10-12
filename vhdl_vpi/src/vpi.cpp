@@ -5,8 +5,6 @@
 #include "vpi.hpp"
 #include "board_config.hpp"
 #include "virtual_board.hpp"
-#include "websocket_server.hpp"
-#include "http_server.hpp"
 
 #define DEBUG
 
@@ -99,8 +97,8 @@ PLI_INT32 cb_init(p_cb_data cb_data) {
     virtual_board* vb = (virtual_board*)cb_data->user_data;
 
     // open websocket & http server in a separate thread
-    std::thread(ws_sv::open_ws_server, vb).detach();
-    std::thread(http_sv::open_http_server, vb).detach();
+    vb->open_ws_server();
+    vb->open_http_server();
 
     // register linked pins values change event
     for (auto& p : vb->_pin_set.pins) {
@@ -127,6 +125,7 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     // printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
     // printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
     set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
+
     // printf("inputport = %x\n", vpi_handle_by_name("up_counter.inputport_sw", NULL));
     // printf("outputport = %x\n", get_net_val(vpi_handle_by_name("up_counter.outputport_sw",
     // NULL)));
@@ -156,14 +155,22 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
     virtual_board* vb = (virtual_board*)cb_data->user_data;
+    if (vb->handler->connections.size() < 1) {
+        // if no peers listening, no point in announce anything..
+        return 0;
+    }
+
     vpiHandle pin_changed_ptr = (vpiHandle)cb_data->obj;
     auto pin = vb->_pin_set.get_pin(pin_changed_ptr);
-
-    printf("pin changed: ");
     pin->debug_pin();
 
     // broadcast to all websocket connections that pin changed
-    vb->_events.push(board_event{pin, pin->get_value() ? true : false});
+    vb->ws_sv.execute([vb, pin] {
+        char msg[256];
+        snprintf(msg, sizeof(msg), "%s = %d", pin->id.c_str(), pin->get_value());
+        vb->handler->send_all(msg);
+    });
+
     return 0;
 }
 
