@@ -11,10 +11,11 @@ std::vector<board_pin> get_board_config() {
     try {
         cfg.readFile("assets/board.cfg");
     } catch (const libconfig::FileIOException& fioex) {
-        fprintf(stderr, "I/O error while reading file. \n");
+        fprintf(stderr,
+                "Board config @ I/O error while reading file, does 'assets/board.cfg' exist?. \n");
         exit(-1);
     } catch (const libconfig::ParseException& pex) {
-        fprintf(stderr, "Parse error at %s:%d - %s \n", pex.getFile(), pex.getLine(),
+        fprintf(stderr, "Board config @ Parse error at %s:%d - %s \n", pex.getFile(), pex.getLine(),
                 pex.getError());
         exit(-1);
     }
@@ -23,7 +24,8 @@ std::vector<board_pin> get_board_config() {
         std::string name = cfg.lookup("board_name");
         printf("Board name: %s \n", name.c_str());
     } catch (const libconfig::SettingNotFoundException& nfex) {
-        fprintf(stderr, "No 'board_name' setting in configuration file.\n");
+        fprintf(stderr, "Board config @ No 'board_name' setting in 'assets/board.cfg'.\n");
+        exit(-1);
     }
 
     const libconfig::Setting& root = cfg.getRoot();

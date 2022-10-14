@@ -13,7 +13,7 @@ This project aims to allow VHDL simulation on a "virtual board" (so a FPGA board
 
 The VHDL simulation is done via [GHDL](https://github.com/ghdl/ghdl), which runs a [`.vpi`](https://en.wikipedia.org/wiki/Verilog_Procedural_Interface) module built by `g++`.
 
-We can manipulate the simulation signals via a websocket server, customize board IO pins and also assign signals to those pins, [read more about the VPI module here](https://github.com/roby2014/virtual-board-vhdl/tree/main/vhdl_vpi).
+We can access the simulation signals values via a websocket server, customize board IO pins and also assign signals to those pins, [read more about the VPI module here](https://github.com/roby2014/virtual-board-vhdl/tree/main/vhdl_vpi).
 
 
 ## UsbPort

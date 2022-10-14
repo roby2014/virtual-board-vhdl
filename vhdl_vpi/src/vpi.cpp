@@ -50,6 +50,11 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
 
     // parse custom pin assignments
     std::ifstream ifs("assets/assignments.cfg");
+    if (!ifs.is_open()) {
+        fprintf(stderr, "Assignments config @ I/O error while reading file, does "
+                        "'assets/assignments.cfg' exist?. \n");
+        exit(-1);
+    }
     std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
     assignments_cfg::lexer lexer;
     assignments_cfg::parser parser;
@@ -60,6 +65,10 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     // lexer.debug_tokens(tokens);
     parser.debug_assignments(result);
 #endif
+
+    if (result.size() == 0) {
+        vpi_printf("VPI_WARNING: 'assets/assignments.cfg' DOES NOT CONTAIN ANY PIN ASSIGNMENT.\n");
+    }
 
     // check if pins from assignments file are valid
     for (const auto& assignment : result) {
@@ -243,12 +252,11 @@ pin_set get_pins_signals(virtual_board& vb,
         int net_dir = vpi_get(vpiDirection, net); // 1 = input (SW), 2 = output (LEDR)
 
 #ifdef DEBUG
-        printf("[DBG] %s %d %d\n", net_name, net_width, net_dir);
+        printf("\t [DBG all signals] %s %d %d\n", net_name, net_width, net_dir);
 #endif
         // TODO: do we only care about Input/Output signals?
         if (net_dir != 1 && net_dir != 2)
             continue;
-        printf("\t-> %s added\n", net_name);
 
         total_signals++;
 
@@ -280,7 +288,8 @@ pin_set get_pins_signals(virtual_board& vb,
     }
 
     if (total_pins_found != total_signals) {
-        vpi_printf("VPI_WARNING: There are signals that are not connected to any PIN (%ld/%ld).\n",
+        vpi_printf("VPI_WARNING: THERE ARE SIGNALS THAT ARE NOT CONNECTED TO ANY PIN "
+                   "(connected/total) = (%ld/%ld).\n",
                    total_pins_found, total_signals);
     }
 

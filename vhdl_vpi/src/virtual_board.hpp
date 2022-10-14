@@ -97,8 +97,9 @@ public:
 
     /// Debugs board's pin set
     void debug() const {
-        printf("[debug] PIN SET:\n");
+        printf("[debug PIN SET] start\n");
         _pin_set.debug_pin_set();
+        printf("[debug PIN SET] end\n");
     }
 };
 
