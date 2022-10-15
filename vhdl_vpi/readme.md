@@ -1,5 +1,5 @@
 # VPI module
-To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL`, `libconfig++-dev` and `libboost-dev`.
+To compile and run the VPI plugin, you will need a recent version of `g++`, `GHDL` and `seasocks`.
 
 If you want to test other VHDL code, you have to change `VHDL_FILES` and `EXEC_TOP_UNIT` inside the Makefile.
 

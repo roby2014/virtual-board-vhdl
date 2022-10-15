@@ -1,49 +1,75 @@
 #include <stdio.h>
 #include <vector>
+#include <fstream>
+#include <iostream>
 #include "board_config.hpp"
-#include "libconfig.h++"
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 namespace board_config {
 
 std::vector<board_pin> get_board_config() {
-    libconfig::Config cfg;
 
-    try {
-        cfg.readFile("assets/board.cfg");
-    } catch (const libconfig::FileIOException& fioex) {
+    std::ifstream f("assets/board.json");
+    if (!f.is_open()) {
         fprintf(stderr,
-                "Board config @ I/O error while reading file, does 'assets/board.cfg' exist?. \n");
-        exit(-1);
-    } catch (const libconfig::ParseException& pex) {
-        fprintf(stderr, "Board config @ Parse error at %s:%d - %s \n", pex.getFile(), pex.getLine(),
-                pex.getError());
+                "Board config @ I/O error while reading file, does 'assets/board.json' exist?. \n");
         exit(-1);
     }
+    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
 
-    try {
-        std::string name = cfg.lookup("board_name");
-        printf("Board name: %s \n", name.c_str());
-    } catch (const libconfig::SettingNotFoundException& nfex) {
-        fprintf(stderr, "Board config @ No 'board_name' setting in 'assets/board.cfg'.\n");
-        exit(-1);
-    }
-
-    const libconfig::Setting& root = cfg.getRoot();
     std::vector<board_pin> board_pins;
 
-    auto led_pins = get_peripheral(root, "leds");
-    board_pins.insert(board_pins.end(), led_pins.begin(), led_pins.end());
+    try {
+        rapidjson::Document d;
+        d.Parse(str.c_str());
+        const rapidjson::Value& a = d["leds"];
+        for (auto& v : a.GetArray())
+            printf("%s ", v.GetString());
 
-    auto switches_pins = get_peripheral(root, "switches");
-    board_pins.insert(board_pins.end(), switches_pins.begin(), switches_pins.end());
-
-    for (const auto& p : board_pins) {
-        p.debug_pin();
+    } catch (std::exception& e) {
+        fprintf(stderr, "Board config @ ERROR: %s \n", e.what());
+        exit(-1);
     }
-    // TODO:
+    /*
+        libconfig::Config cfg;
+
+        try {
+            cfg.readFile("assets/board.cfg");
+        } catch (const libconfig::FileIOException& fioex) {
+            fprintf(stderr,
+                    "Board config @ I/O error while reading file, does 'assets/board.cfg' exist?.
+       \n"); exit(-1); } catch (const libconfig::ParseException& pex) { fprintf(stderr, "Board
+       config @ Parse error at %s:%d - %s \n", pex.getFile(), pex.getLine(), pex.getError());
+            exit(-1);
+        }
+
+            try {
+                std::string name = cfg.lookup("board_name");
+                printf("Board name: %s \n", name.c_str());
+            } catch (const libconfig::SettingNotFoundException& nfex) {
+                fprintf(stderr, "Board config @ No 'board_name' setting in 'assets/board.cfg'.\n");
+                exit(-1);
+            }
+
+            const libconfig::Setting& root = cfg.getRoot();
+            std::vector<board_pin> board_pins;
+
+            auto led_pins = get_peripheral(root, "leds");
+            board_pins.insert(board_pins.end(), led_pins.begin(), led_pins.end());
+
+            auto switches_pins = get_peripheral(root, "switches");
+            board_pins.insert(board_pins.end(), switches_pins.begin(), switches_pins.end());
+
+            for (const auto& p : board_pins) {
+                p.debug_pin();
+            }
+            // TODO:
+            */
     return board_pins;
 }
-
+/*
 std::vector<board_pin> get_peripheral(const libconfig::Setting& root, const char* peripheral) {
     std::vector<board_pin> pins;
 
@@ -83,5 +109,5 @@ bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin
     }
     return false;
 }
-
+*/
 } // namespace board_config

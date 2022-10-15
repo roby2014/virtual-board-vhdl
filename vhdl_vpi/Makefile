@@ -4,18 +4,18 @@ EXEC_TOP_UNIT = up_counter 		# top entity name
 SRC		= $(shell find ./src/ -name "*.cpp")
 OBJ		= $(SRC:.cpp=.o )
 INCLUDE = src
+EXTERNAL = external
+SEASOCKS = $(EXTERNAL)/seasocks/
 LIB		= 
 BUILD   = build
 TARGET  = virtual_board.vpi
 
-CXX      	= g++
+CXX      	= g++ 
 CXXFLAGS 	= -W -Wall -Wextra -std=c++2a -fPIC -pthread
 CXXFLAGS 	+= -Wno-write-strings -Wno-missing-field-initializers -Wno-format
-LIBRARIES  	= -lm -lconfig++ -L/home/roby/seasocks/build/src/main/c/ -lseasocks
+LIBRARIES  	= -lm -L/home/roby/seasocks/build/src/main/c/
 
-# TODO: better way of doing this
-# TODO: seasocks on makefile project...
-INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg -I/home/roby/seasocks/src/main/c/
+INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg -I$(EXTERNAL) -I$(SEASOCKS)
 
 GHDL     = ghdl
 GHDLLD   = $(GHDL) --vpi-link $(CXX)

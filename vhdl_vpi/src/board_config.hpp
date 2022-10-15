@@ -2,16 +2,16 @@
 #define BOARD_CONFIG_HPP
 
 #include <vector>
+#define LIBCONFIG_STATIC
 #include <libconfig.h++>
 
 namespace board_config {
 
 typedef struct board_pin {
-    std::string id;    // PIN_XXX
-    std::string name;  // SW0
-    std::size_t index; // 0
+    std::string id;   // PIN_XXX
+    std::string name; // SW0
     void debug_pin() const {
-        printf("\t%s %s (%ld)\n", id.c_str(), name.c_str(), index);
+        printf("\t%s %s\n", id.c_str(), name.c_str());
     }
 } board_pin;
 

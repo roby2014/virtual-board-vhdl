@@ -11,7 +11,7 @@
 
 #include "seasocks/Server.h"
 #include "seasocks/PrintfLogger.h"
-#include "external/cpp-httplib/httplib.h"
+#include "cpp-httplib/httplib.h"
 
 /// Represents a pin value change
 /// Stores a pointer to the pin that changed, and its new value
