@@ -73,18 +73,6 @@ GHDL 3.0.0-dev (tarball) [Dunoon edition]
 Written by Tristan Gingold.
 ```
 
-```
-$ pacman -Q --info libconfig | grep 'Version'
-
-Version         : 1.7.3-1
-```
-
-```
-$ pacman -Q --info boost | grep 'Version'
-
-Version         : 1.79.0-1
-```
-
 ## WSL Ubuntu 20.04.4 LTS (Focal Fossa):
 
 ```
@@ -100,11 +88,6 @@ GHDL 3.0.0-dev (tarball) [Dunoon edition]
  Compiled with GNAT Version: 9.4.0
  mcode code generator
 Written by Tristan Gingold.
-```
-
-```
-$ dpkg -s libconfig++-dev | grep 'Version'
-Version: 1.5-0.4build1
 ```
 
 ```
