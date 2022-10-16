@@ -2,8 +2,9 @@
 #define BOARD_CONFIG_HPP
 
 #include <vector>
-#define LIBCONFIG_STATIC
-#include <libconfig.h++>
+#include "json/json.hpp"
+
+using json = nlohmann::json;
 
 namespace board_config {
 
@@ -18,11 +19,13 @@ typedef struct board_pin {
 /// opens "board.cfg" and stores peripherals pins into a generic collection, returning it
 std::vector<board_pin> get_board_config();
 
-/// returns [peripheral] pins info from [root] cfg by its name
-std::vector<board_pin> get_peripheral(const libconfig::Setting& root, const char* peripheral);
+/// adds [peripheral] pins info from json [data] to [board_pins] collection
+void add_pins_to_list(const json& data, std::vector<board_pin>& board_pins,
+                      const char* peripheral_name);
 
-/// returns true if [pin_name] exists in our custom board config
-bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin_name);
+/// returns true if [pin_info] exists in our custom board config
+/// pin_info can be either PIN_ID or PIN name
+bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin_info);
 
 } // namespace board_config
 

@@ -1,19 +1,22 @@
+# This Makefile currently can compile the VPI module and also execute [VHDL_FILES] simulation with the VPI
+
 VHDL_FILES = assets/app.vhdl assets/UsbPort_VPI_GHDL.vhd # all vhdl files to analyze
 EXEC_TOP_UNIT = up_counter 		# top entity name
 
 SRC		= $(shell find ./src/ -name "*.cpp")
 OBJ		= $(SRC:.cpp=.o )
+
 INCLUDE = src
 EXTERNAL = external
 SEASOCKS = $(EXTERNAL)/seasocks/
-LIB		= 
+
 BUILD   = build
 TARGET  = virtual_board.vpi
 
 CXX      	= g++ 
 CXXFLAGS 	= -W -Wall -Wextra -std=c++2a -fPIC -pthread
 CXXFLAGS 	+= -Wno-write-strings -Wno-missing-field-initializers -Wno-format
-LIBRARIES  	= -lm -L/home/roby/seasocks/build/src/main/c/
+LIBRARIES  	= -lm -L/home/roby/seasocks/build/src/main/c/ # TODO: static link seasocks
 
 INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg -I$(EXTERNAL) -I$(SEASOCKS)
 

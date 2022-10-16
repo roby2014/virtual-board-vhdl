@@ -3,7 +3,8 @@
     "leds": [
         {
             "pin_name": "LEDR0",
-            "pin_id": "PIN_A7"
+            "pin_id": "PIN_A7",
+            "test": 2
         },
         {
             "pin_name": "LEDR1",

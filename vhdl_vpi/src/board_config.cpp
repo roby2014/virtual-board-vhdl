@@ -3,111 +3,48 @@
 #include <fstream>
 #include <iostream>
 #include "board_config.hpp"
-#include "rapidjson/document.h"
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
 
 namespace board_config {
 
 std::vector<board_pin> get_board_config() {
-
-    std::ifstream f("assets/board.json");
-    if (!f.is_open()) {
-        fprintf(stderr,
-                "Board config @ I/O error while reading file, does 'assets/board.json' exist?. \n");
-        exit(-1);
-    }
-    std::string str((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-
     std::vector<board_pin> board_pins;
-
     try {
-        rapidjson::Document d;
-        d.Parse(str.c_str());
-        const rapidjson::Value& a = d["leds"];
-        for (auto& v : a.GetArray())
-            printf("%s ", v.GetString());
-
+        std::ifstream fp("assets/board.json");
+        json json_data = json::parse(fp);
+        add_pins_to_list(json_data, board_pins, "leds");
+        add_pins_to_list(json_data, board_pins, "switches");
+        // TODO: buttons, hex display, ...?
     } catch (std::exception& e) {
         fprintf(stderr, "Board config @ ERROR: %s \n", e.what());
         exit(-1);
     }
-    /*
-        libconfig::Config cfg;
-
-        try {
-            cfg.readFile("assets/board.cfg");
-        } catch (const libconfig::FileIOException& fioex) {
-            fprintf(stderr,
-                    "Board config @ I/O error while reading file, does 'assets/board.cfg' exist?.
-       \n"); exit(-1); } catch (const libconfig::ParseException& pex) { fprintf(stderr, "Board
-       config @ Parse error at %s:%d - %s \n", pex.getFile(), pex.getLine(), pex.getError());
-            exit(-1);
-        }
-
-            try {
-                std::string name = cfg.lookup("board_name");
-                printf("Board name: %s \n", name.c_str());
-            } catch (const libconfig::SettingNotFoundException& nfex) {
-                fprintf(stderr, "Board config @ No 'board_name' setting in 'assets/board.cfg'.\n");
-                exit(-1);
-            }
-
-            const libconfig::Setting& root = cfg.getRoot();
-            std::vector<board_pin> board_pins;
-
-            auto led_pins = get_peripheral(root, "leds");
-            board_pins.insert(board_pins.end(), led_pins.begin(), led_pins.end());
-
-            auto switches_pins = get_peripheral(root, "switches");
-            board_pins.insert(board_pins.end(), switches_pins.begin(), switches_pins.end());
-
-            for (const auto& p : board_pins) {
-                p.debug_pin();
-            }
-            // TODO:
-            */
     return board_pins;
 }
-/*
-std::vector<board_pin> get_peripheral(const libconfig::Setting& root, const char* peripheral) {
-    std::vector<board_pin> pins;
 
-    try {
-        const libconfig::Setting& leds = root["board"][peripheral];
-        int count = leds.getLength();
+/// This struct will be useful to get json data values
+/// by using [NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE] macro
+typedef struct key_value_t {
+    std::string pin_name;
+    std::string pin_id;
+} key_value_t;
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(key_value_t, pin_name, pin_id);
 
-        printf("%s (%d in total):\n", peripheral, count);
+void add_pins_to_list(const json& data, std::vector<board_pin>& board_pins,
+                      const char* peripheral_name) {
 
-        for (int i = 0; i < count; ++i) {
-            const libconfig::Setting& ledr = leds[i];
-
-            // Only output the record if all of the expected fields are present.
-            std::string name, id;
-            int index;
-
-            if (!(ledr.lookupValue("pin_name", name) && ledr.lookupValue("pin_id", id) &&
-                  ledr.lookupValue("pin_index", index)))
-                continue;
-
-            printf("%s %s %d\n", name.c_str(), id.c_str(), index);
-            board_pin item = {.id = id, .name = name, .index = (std::size_t)index};
-            pins.push_back(item);
-        }
-    } catch (const libconfig::SettingNotFoundException& nfex) {
-        fprintf(stderr, "Setting \"root[board][%s]\" not found.\n", peripheral);
+    auto objects{data.at(peripheral_name).get<std::vector<key_value_t>>()};
+    for (const auto& p : objects) {
+        board_pins.push_back({board_pin{.id = p.pin_id, .name = p.pin_name}});
     }
-
-    return pins;
 }
 
-bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin_name) {
+bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin_info) {
     for (const auto& pin : board_pins) {
-        if (pin_name == pin.id) {
+        if (pin_info == pin.id || pin_info == pin.name) {
             return true;
         }
     }
     return false;
 }
-*/
+
 } // namespace board_config
