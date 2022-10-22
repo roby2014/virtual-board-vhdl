@@ -14,5 +14,6 @@ int pin::get_value() const {
 
 /// debug pin
 void pin::debug_pin() const {
-    printf("\t%s (%s[%ld]) = %d (0x%x) \n", id.c_str(), net_name.c_str(), index, get_value(), net);
+    printf("\tPIN CHANGED -> %s (%s[%ld]) = %d (0x%x) \n", id.c_str(), net_name.c_str(), index,
+           get_value(), net);
 }

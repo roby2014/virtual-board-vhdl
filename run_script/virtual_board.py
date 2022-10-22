@@ -4,12 +4,12 @@
 # python script to run the VHDL simulator alongside with the VPI module (virtual_board)
 
 # GOAL:
-# 1. replace UsbPort and top entity file if project uses default UsbPort implementation
+# 1. replace UsbPort and top entity file if project uses default UsbPort implementation TODO: via other script?
 # 1. analyze and elaborate VHDL project files (with GHDL -a & -e)
 # 2. compile VPI module (virtual_board)
 # 3. run simulation alongside with VPI module
 
-# USAGE: virtual_board [--vhdl_project_dir ...] top_entity_name vpi_file_path
+# USAGE: virtual_board vhdl_proj_dir top_entity_name vpi_file_path
 # "./virtual_board -h" for more info
 
 import argparse
@@ -63,7 +63,7 @@ for filename in os.listdir(vhdl_proj_dir):
     if (file.endswith(".vhd") == False and file.endswith(".vhdl")) == False:
         continue
 
-    p = Popen(["ghdl", "-a", file], stdout=PIPE, stderr=PIPE)
+    p = Popen(["ghdl", "-a", "-fsynopsys", file], stdout=PIPE, stderr=PIPE)
     output, error = p.communicate()
     if p.returncode != 0: 
         print("[ERROR] ABORTING: Could not analyze '{}':\n{}".format(file, error.decode()))
@@ -73,7 +73,7 @@ for filename in os.listdir(vhdl_proj_dir):
 # elaborate top entity
 top_entity_name = str(args["top_entity_name"])
 
-p = Popen(["ghdl", "-e", top_entity_name], stdout=PIPE, stderr=PIPE)
+p = Popen(["ghdl", "-e", "-fsynopsys", top_entity_name], stdout=PIPE, stderr=PIPE)
 output, error = p.communicate()
 if p.returncode != 0: 
     print("[ERROR] ABORTING: Could not elaborate '{}':\n{}".format(top_entity_name, error.decode()))
@@ -102,5 +102,5 @@ def execute(cmd):
         print("[ERROR] ABORTING: Could not run virtual board simulation.\n")
         exit(-1)
 
-for output in execute(["ghdl", "-r", top_entity_name, "--vpi={}".format(vpi_file_path)]):
+for output in execute(["ghdl", "-r", "-fsynopsys", top_entity_name, "--vpi={}".format(vpi_file_path)]):
     print(output, end="")

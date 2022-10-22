@@ -1,0 +1,35 @@
+{
+  "board_name": "DE10-Lite FPGA Board",
+  "leds": [
+    {
+      "pin_name": "LEDR0",
+      "pin_id": "PIN_A0"
+    },
+    {
+      "pin_name": "LEDR1",
+      "pin_id": "PIN_A1"
+    },
+    {
+      "pin_name": "LEDR2",
+      "pin_id": "PIN_A2"
+    },
+    {
+      "pin_name": "LEDR3",
+      "pin_id": "PIN_A3"
+    },
+    {
+      "pin_name": "LEDR4",
+      "pin_id": "PIN_A4"
+    }
+  ],
+  "switches": [
+    {
+      "pin_name": "SW0",
+      "pin_id": "PIN_C10"
+    },
+    {
+      "pin_name": "SW1",
+      "pin_id": "PIN_C11"
+    }
+  ]
+}

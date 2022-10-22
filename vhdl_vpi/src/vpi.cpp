@@ -127,17 +127,18 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     // printf("press enter for next clock\n");
     // getchar();
 
-    set_net_val(vb->_pin_set.get_pin_net("clk"), test);
+    set_net_val(vpi_handle_by_name("up_counter.clk", NULL), test);
+    // set_net_val(vb->_pin_set.get_pin_net("clk"), test);
+
+    printf("Setting clock to %d, cout value = %d\n", test,
+           get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+
     test = !test;
 
     // printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
-    // printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
-    // printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
-    set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
-
-    // printf("inputport = %x\n", vpi_handle_by_name("up_counter.inputport_sw", NULL));
-    // printf("outputport = %x\n", get_net_val(vpi_handle_by_name("up_counter.outputport_sw",
-    // NULL)));
+    printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
+    // set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
 
     sleep(1);
     check_error();
@@ -145,16 +146,24 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     return 0;
 }
 
+/// wrapper to pass in to leds_change_callback
+/// pin is needed because we need to know what INDEX changed (in case of array)
+typedef struct vb_pin_t {
+    virtual_board* vb;
+    pin* p;
+} vb_pin_t;
+
 void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* p,
                                    virtual_board* vb) {
     s_vpi_time tim = {.type = vpiSuppressTime};
     s_vpi_value val = {.format = vpiSuppressVal};
     s_cb_data cb = {.reason = cbValueChange,
                     .cb_rtn = cb_rtn,
-                    .obj = p->net,
+                    .obj = p->net, // trigger callback when p->net value changes!
                     .time = &tim,
                     .value = &val,
-                    .user_data = (PLI_BYTE8*)vb};
+                    // we will need this memory the whole program, so its ok mallocing
+                    .user_data = (PLI_BYTE8*)new vb_pin_t{.vb = vb, .p = p}};
 
     vpiHandle callback_handle = vpi_register_cb(&cb);
     if (!callback_handle)
@@ -163,15 +172,20 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
 }
 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
-    virtual_board* vb = (virtual_board*)cb_data->user_data;
+    vb_pin_t* vb_pin = (vb_pin_t*)cb_data->user_data;
+    virtual_board* vb = vb_pin->vb;
+    vb_pin->p->debug_pin();
+
     if (vb->handler->connections.size() < 1) {
         // if no peers listening, no point in announce anything..
         return 0;
     }
 
-    vpiHandle pin_changed_ptr = (vpiHandle)cb_data->obj;
-    auto pin = vb->_pin_set.get_pin(pin_changed_ptr);
-    pin->debug_pin();
+    // auto pin = vb->_pin_set.get_pin(cb_data->obj);
+    // NOTE: this would return the pin with index 0, thats why we are using vb_pin_t here
+    // so we can know what index changed, and send the PIN linked to that index
+
+    pin* pin = vb_pin->p;
 
     // broadcast to all websocket connections that pin changed
     vb->ws_sv.execute([vb, pin] {

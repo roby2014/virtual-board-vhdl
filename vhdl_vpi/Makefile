@@ -16,7 +16,7 @@ TARGET  = virtual_board.vpi
 CXX      	= g++ 
 CXXFLAGS 	= -W -Wall -Wextra -std=c++2a -fPIC -pthread
 CXXFLAGS 	+= -Wno-write-strings -Wno-missing-field-initializers -Wno-format
-LIBRARIES  	= -lm -L/home/roby/seasocks/build/src/main/c/ # TODO: static link seasocks
+LIBRARIES  	= -lm /home/roby/seasocks/build/src/main/c/libseasocks.a # TODO: static link seasocks
 
 INCLUDEFLAG = -I$(INCLUDE) -I$(INCLUDE)/assignments_cfg -I$(EXTERNAL) -I$(SEASOCKS)
 
