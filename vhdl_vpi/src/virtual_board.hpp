@@ -42,11 +42,7 @@ public:
     void open_http_server();
 
     /// Debugs board's pin set
-    void debug() const {
-        printf("[debug PIN SET] start\n");
-        _pin_set.debug_pin_set();
-        printf("[debug PIN SET] end\n");
-    }
+    void debug() const;
 };
 
 #endif

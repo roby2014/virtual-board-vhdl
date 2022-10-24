@@ -25,11 +25,11 @@
   "switches": [
     {
       "pin_name": "SW0",
-      "pin_id": "PIN_C10"
+      "pin_id": "PIN_SW0"
     },
     {
       "pin_name": "SW1",
-      "pin_id": "PIN_C11"
+      "pin_id": "PIN_SW1"
     }
   ]
 }

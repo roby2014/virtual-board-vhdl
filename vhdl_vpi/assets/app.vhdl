@@ -54,7 +54,7 @@ BEGIN
         inputPort => count
     );
 
-    PROCESS (clk, reset) BEGIN
+    PROCESS (clk, reset, enable) BEGIN
         IF (reset = '1') THEN
             count <= (OTHERS => '0');
         ELSIF (rising_edge(clk)) THEN

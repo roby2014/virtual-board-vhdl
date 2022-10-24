@@ -137,11 +137,12 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     test = !test;
 
     // printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
-    printf("cout = %d\n", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    printf("cout = %d\t", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
     printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
     // set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
 
     sleep(1);
+    // getchar();
     check_error();
     register_cb_after(main_callback, 1, vb);
     return 0;
@@ -175,7 +176,7 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
     vb_pin_t* vb_pin = (vb_pin_t*)cb_data->user_data;
     virtual_board* vb = vb_pin->vb;
-    vb_pin->p->debug_pin();
+    // vb_pin->p->debug_pin();
 
     if (vb->handler->connections.size() < 1) {
         // if no peers listening, no point in announce anything..

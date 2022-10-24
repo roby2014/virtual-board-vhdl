@@ -54,3 +54,9 @@ void virtual_board::open_http_server() {
     printf("Opening HTTP server... ( http://%s:%d )\n", host.c_str(), http_port);
     std::thread([this]() { this->http_sv.listen(this->host, this->http_port); }).detach();
 }
+
+void virtual_board::debug() const {
+    printf("[debug PIN SET] start\n");
+    _pin_set.debug_pin_set();
+    printf("[debug PIN SET] end\n");
+}

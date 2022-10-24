@@ -10,7 +10,7 @@ ENTITY up_counter IS
         -- Automated Inserted code for VPI_GHDL
 
         cout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-        enable : IN STD_LOGIC := '1';
+        enable : IN STD_LOGIC;
         clk : IN STD_LOGIC;
         reset : IN STD_LOGIC
     );
@@ -48,7 +48,7 @@ BEGIN
         inputPort => count
     );
 
-    PROCESS (clk, reset) BEGIN
+    PROCESS (clk, reset, enable) BEGIN
         IF (reset = '1') THEN
             count <= (OTHERS => '0');
         ELSIF (rising_edge(clk)) THEN
