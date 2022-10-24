@@ -40,7 +40,7 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
     s_vpi_vlog_info info;
     vpi_get_vlog_info(&info);
     vpi_printf("-------------------------------------------------\n");
-    vpi_printf("VHDL Virtual Board Emulator using VPI + GHDL\n");
+    vpi_printf("VHDL Simulator via Virtual Board using VPI + GHDL\n");
     vpi_printf("Copyright (C) 2022 roby\n");
     vpi_printf("%s %s\n", info.product, info.version);
     vpi_printf("-------------------------------------------------\n");
@@ -55,6 +55,7 @@ PLI_INT32 cb_simulation_start(p_cb_data cb_data __attribute__((unused))) {
                         "'assets/assignments.cfg' exist?. \n");
         exit(-1);
     }
+
     std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
     assignments_cfg::lexer lexer;
     assignments_cfg::parser parser;
