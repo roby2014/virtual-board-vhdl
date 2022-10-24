@@ -29,8 +29,7 @@ Since it has a websocket server, it won't be hard to display signals in a "prett
 ## Credits
 - [GHDL](https://github.com/ghdl/ghdl) - VHDL 2008/93/87 simulator
 - [ghdl-cosim](https://ghdl.github.io/ghdl-cosim/vpi/examples/index.html) - GHDL co-simulation projects using VPI
-- [libconfig](http://hyperrealm.github.io/libconfig/) - Library for processing structured configuration files
 - [seasocks](https://github.com/mattgodbolt/seasocks) - Simple, small, C++ embeddable webserver with WebSockets support
+- [nlohmann/json](https://github.com/nlohmann/json) - JSON for Modern C++
 - [cpp-httplib](https://github.com/yhirose/cpp-httplib) - A C++ header-only HTTP/HTTPS server and client library 
 - [khttp](https://github.com/ascclemens/khttp) - Kotlin HTTP requests library
-- [ultralight](https://github.com/ultralight-ux/ultralight) - Next-generation HTML renderer for apps and games (C++)
