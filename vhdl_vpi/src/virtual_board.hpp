@@ -27,7 +27,7 @@ public:
     /// Server & handler to the websocket server
     // TODO: logger should not be static, but also should be read from file like host
     seasocks::Server ws_sv{std::make_shared<seasocks::PrintfLogger>(seasocks::Logger::Level::Info)};
-    std::shared_ptr<ws_sv_t::websocket_handler> handler;
+    std::shared_ptr<ws_sv::websocket_handler> handler;
 
     /// Websocket connections
     int _peers_count;

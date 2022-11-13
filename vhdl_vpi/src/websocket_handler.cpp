@@ -1,12 +1,11 @@
 #include "websocket_handler.hpp"
 #include "virtual_board.hpp"
 #include "vpi.hpp"
+#include "utils.hpp"
 
-namespace ws_sv_t {
+namespace ws_sv {
 
-websocket_handler::websocket_handler(virtual_board* vb_ptr) {
-    vb = vb_ptr;
-}
+websocket_handler::websocket_handler(virtual_board* vb_ptr) : vb(vb_ptr) {}
 
 void websocket_handler::send_all(const std::string& data) {
     for (const auto& c : connections)
@@ -18,7 +17,7 @@ void websocket_handler::onData(WebSocket* conn, const char* data) {
     auto words = utils::split(str, ' ');
 
     if (words.size() != 3 || words[0] != "CHANGE" || (words[2] != "0" && words[2] != "1")) {
-        conn->send("[ERROR] Usage: CHANGE PIN_ID VALUE(1/0)");
+        conn->send("[ERROR] Usage: CHANGE pinId VALUE(1/0)");
         return;
     }
 
@@ -39,8 +38,6 @@ void websocket_handler::onData(WebSocket* conn, const char* data) {
     auto mask = 1 << pin->index;
     auto new_value = net_val ^ mask;
     vpi::set_net_val(pin->net, new_value); // TODO: should we worry about sign?
-
-    conn->send("SUCCESS");
 }
 
 void websocket_handler::onConnect(WebSocket* connection) {
@@ -51,4 +48,4 @@ void websocket_handler::onDisconnect(WebSocket* connection) {
     connections.erase(connection);
 }
 
-} // namespace ws_sv_t
+} // namespace ws_sv

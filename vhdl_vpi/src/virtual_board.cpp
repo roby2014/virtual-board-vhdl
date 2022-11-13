@@ -9,7 +9,7 @@ virtual_board::virtual_board() {
 }
 
 void virtual_board::open_ws_server() {
-    handler = std::make_shared<ws_sv_t::websocket_handler>(this);
+    handler = std::make_shared<ws_sv::websocket_handler>(this);
     ws_sv.addWebSocketHandler("/", handler);
     std::thread([this]() { this->ws_sv.serve(this->host.c_str(), this->ws_port); }).detach();
 }

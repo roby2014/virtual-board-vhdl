@@ -2,11 +2,10 @@
 #define WEBSOCKET_HANDLER_HPP
 
 #include "seasocks/WebSocket.h"
-#include "utils.hpp"
 
 class virtual_board;
 
-namespace ws_sv_t {
+namespace ws_sv {
 
 using namespace seasocks;
 
@@ -21,7 +20,7 @@ public:
     /// sends [data] message to all connected peers
     void send_all(const std::string& data);
 
-    // receive "CHANGE PIN_ID VALUE" event
+    // receive "CHANGE pinId VALUE" event
     virtual void onData(WebSocket* conn, const char* data) override;
 
     // called when peer connects
@@ -31,6 +30,6 @@ public:
     virtual void onDisconnect(WebSocket* connection) override;
 };
 
-} // namespace ws_sv_t
+} // namespace ws_sv
 
 #endif

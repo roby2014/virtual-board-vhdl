@@ -11,7 +11,7 @@ For more info read:
 
 ## Custom PIN Set board configuration
 This emulator allows having a custom PIN set, to add your desired pins, edit [`assets/board.cfg`](https://github.com/roby2014/virtual-board-vhdl/blob/main/vhdl_vpi/assets/board.cfg).
-Each pin should have a `pin_name`, `pin_id` and its `index`.
+Each pin should have a `pinName`, `pinId`.
 For now, only `leds`, `switches`, (`hex` and `buttons` in the future) are allowed.
 
 ## Signal assignments
@@ -19,7 +19,7 @@ To assign your top entity VHDL signals to board PINS, edit [`assets/assignments.
 The configuration should look pretty obvious if you open the file, but just in case, this is how it's done:
 ```
 // This is a comment
-// PIN_ID -> SIGNAL
+// pinId -> SIGNAL
 
 PIN_A8 -> enable
 PIN_A9 -> COUT
@@ -32,6 +32,11 @@ Everytime a signal/pin value changes, the websocket server sends a message to al
 Let's suppose `PIN_A9` changed to 1, this is what the server will send to its peers:
 ```
 PIN_A9 = 1
+```
+
+The peers can also manipulate input signals:
+```
+CHANGE PIN_A9 0
 ```
 
 ## UsbPort

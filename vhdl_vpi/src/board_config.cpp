@@ -24,17 +24,17 @@ std::vector<board_pin> get_board_config() {
 /// This struct will be useful to get json data values
 /// by using [NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE] macro
 typedef struct key_value_t {
-    std::string pin_name;
-    std::string pin_id;
+    std::string pinName;
+    std::string pinId;
 } key_value_t;
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(key_value_t, pin_name, pin_id);
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(key_value_t, pinName, pinId);
 
 void add_pins_to_list(const json& data, std::vector<board_pin>& board_pins,
                       const char* peripheral_name) {
 
     auto objects{data.at(peripheral_name).get<std::vector<key_value_t>>()};
     for (const auto& p : objects) {
-        board_pins.push_back({board_pin{.id = p.pin_id, .name = p.pin_name}});
+        board_pins.push_back({board_pin{.id = p.pinId, .name = p.pinName}});
     }
 }
 

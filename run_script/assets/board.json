@@ -1,35 +1,53 @@
 {
-  "board_name": "DE10-Lite FPGA Board",
+  "boardName": "DE10-Lite FPGA Board",
   "leds": [
     {
-      "pin_name": "LEDR0",
-      "pin_id": "PIN_A0"
+      "pinName": "LEDR0",
+      "pinId": "PIN_A0"
     },
     {
-      "pin_name": "LEDR1",
-      "pin_id": "PIN_A1"
+      "pinName": "LEDR1",
+      "pinId": "PIN_A1"
     },
     {
-      "pin_name": "LEDR2",
-      "pin_id": "PIN_A2"
+      "pinName": "LEDR2",
+      "pinId": "PIN_A2"
     },
     {
-      "pin_name": "LEDR3",
-      "pin_id": "PIN_A3"
+      "pinName": "LEDR3",
+      "pinId": "PIN_A3"
     },
     {
-      "pin_name": "LEDR4",
-      "pin_id": "PIN_A4"
+      "pinName": "LEDR4",
+      "pinId": "PIN_A4"
+    },
+    {
+      "pinName": "LEDR5",
+      "pinId": "PIN_A5"
+    },
+    {
+      "pinName": "LEDR6",
+      "pinId": "PIN_A6"
     }
   ],
   "switches": [
     {
-      "pin_name": "SW0",
-      "pin_id": "PIN_SW0"
+      "pinName": "SW0",
+      "pinId": "PIN_SW0"
     },
     {
-      "pin_name": "SW1",
-      "pin_id": "PIN_SW1"
+      "pinName": "SW1",
+      "pinId": "PIN_SW1"
+    }
+  ],
+  "buttons": [
+    {
+      "pinName": "B1",
+      "pinId": "PIN_B1"
+    },
+    {
+      "pinName": "B2",
+      "pinId": "PIN_B2"
     }
   ]
 }

@@ -24,7 +24,7 @@ void add_pins_to_list(const json& data, std::vector<board_pin>& board_pins,
                       const char* peripheral_name);
 
 /// returns true if [pin_info] exists in our custom board config
-/// pin_info can be either PIN_ID or PIN name
+/// pin_info can be either pinId or PIN name
 bool pin_exists(const std::vector<board_pin>& board_pins, const std::string& pin_info);
 
 } // namespace board_config

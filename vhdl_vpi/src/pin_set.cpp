@@ -45,9 +45,9 @@ pin* pin_set::get_pin(const vpiHandle pin_handle) {
 }
 
 /// returns pin's signal value by his identifier
-bool pin_set::get_pin_value(const std::string& pin_id) const {
+bool pin_set::get_pin_value(const std::string& pinId) const {
     for (const auto& p : pins) {
-        if (p.id == pin_id)
+        if (p.id == pinId)
             return p.get_value();
     }
     return 0;
