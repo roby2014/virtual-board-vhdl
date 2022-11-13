@@ -31,6 +31,7 @@ Since it has a websocket server, it won't be hard to display signals in a "prett
 
 ## Board UI (dynamic)
 The good approach would be to create a UI that reads `board.json` and creates a UI with IO signals depending on what pins the config file has. The board should be also customizable via a config file.
+Under Development: https://github.com/roby2014/virtual-board-gui
 
 ## Credits
 - [GHDL](https://github.com/ghdl/ghdl) - VHDL 2008/93/87 simulator
