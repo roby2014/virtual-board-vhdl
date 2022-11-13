@@ -131,14 +131,14 @@ PLI_INT32 main_callback(p_cb_data cb_data) {
     set_net_val(vpi_handle_by_name("up_counter.clk", NULL), test);
     // set_net_val(vb->_pin_set.get_pin_net("clk"), test);
 
-    printf("Setting clock to %d, cout value = %d\n", test,
-           get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
+    //printf("Setting clock to %d, cout value = %d\n", test,
+           //get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
 
     test = !test;
 
     // printf("dummy = %d\n", get_net_val(vpi_handle_by_name("up_counter.dummy", NULL)));
     printf("cout = %d\t", get_net_val(vpi_handle_by_name("up_counter.cout", NULL)));
-    printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
+    //printf("inp = %d\n", get_net_val(vpi_handle_by_name("up_counter.inputport_sw", NULL)));
     // set_net_val(vpi_handle_by_name("up_counter.outputport_sw", NULL), 15);
 
     sleep(1);
@@ -176,7 +176,7 @@ void register_pins_value_change_cb(PLI_INT32 (*cb_rtn)(struct t_cb_data*), pin* 
 PLI_INT32 on_pins_value_change(p_cb_data cb_data) {
     vb_pin_t* vb_pin = (vb_pin_t*)cb_data->user_data;
     virtual_board* vb = vb_pin->vb;
-    // vb_pin->p->debug_pin();
+    //vb_pin->p->debug_pin();
 
     if (vb->handler->connections.size() < 1) {
         // if no peers listening, no point in announce anything..

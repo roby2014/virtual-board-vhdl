@@ -49,5 +49,47 @@
       "pinName": "B2",
       "pinId": "PIN_B2"
     }
+  ],
+  "otherPins": [
+    {
+      "pinName": "S0",
+      "pinId": "PIN_S0"
+    },
+    {
+      "pinName": "S1",
+      "pinId": "PIN_S1"
+    },
+    {
+      "pinName": "S2",
+      "pinId": "PIN_S2"
+    },
+    {
+      "pinName": "S3",
+      "pinId": "PIN_S3"
+    },
+    {
+      "pinName": "S4",
+      "pinId": "PIN_S4"
+    },
+    {
+      "pinName": "S5",
+      "pinId": "PIN_S5"
+    },
+    {
+      "pinName": "S6",
+      "pinId": "PIN_S6"
+    }
+  ],
+  "sevseg": [
+    {
+      "a": "PIN_S0",
+      "b": "PIN_S1",
+      "c": "PIN_S2",
+      "d": "PIN_S3",
+      "e": "PIN_S4",
+      "f": "PIN_S5",
+      "g": "PIN_S6",
+      "p": ""
+    }
   ]
 }

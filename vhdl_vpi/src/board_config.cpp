@@ -13,7 +13,8 @@ std::vector<board_pin> get_board_config() {
         json json_data = json::parse(fp);
         add_pins_to_list(json_data, board_pins, "leds");
         add_pins_to_list(json_data, board_pins, "switches");
-        // TODO: buttons, hex display, ...?
+        add_pins_to_list(json_data, board_pins, "buttons");
+        add_pins_to_list(json_data, board_pins, "otherPins");
     } catch (std::exception& e) {
         fprintf(stderr, "Board config @ ERROR: %s \n", e.what());
         exit(-1);

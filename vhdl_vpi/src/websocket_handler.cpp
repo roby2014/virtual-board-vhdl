@@ -13,6 +13,8 @@ void websocket_handler::send_all(const std::string& data) {
 }
 
 void websocket_handler::onData(WebSocket* conn, const char* data) {
+    printf("chegou aqui ON DATA : %s\n", data);
+
     std::string str = std::string(data);
     auto words = utils::split(str, ' ');
 
@@ -23,7 +25,9 @@ void websocket_handler::onData(WebSocket* conn, const char* data) {
 
     auto pin = vb->_pin_set.get_pin(words[1]);
     if (pin == nullptr) {
-        conn->send("[ERROR] Invalid pin");
+        char msg[256];
+        snprintf(msg, sizeof(msg), "[ERROR] Invalid pin '%s'", words[1].c_str());
+        conn->send(msg);
         return;
     }
 
@@ -33,10 +37,30 @@ void websocket_handler::onData(WebSocket* conn, const char* data) {
     // we have to do some tricky bit stuff because the net can be an array
     // so setting a net to X value, might change the whole array
     auto net_val = vpi::get_net_val(pin->net);
-
-    // so we do XOR to only activate/deactivate the bit index we want
     auto mask = 1 << pin->index;
-    auto new_value = net_val ^ mask;
+
+    // 0000    net val
+    //    1    mask
+    //    0    val
+    //    0   new_value (and)
+
+    // 0000    net val
+    //    1    mask
+    //    1    val
+    //    0   new_value (or)
+
+    bool val = words[2] == "0" ? 0 : 1;
+    int new_value;
+    if (val == 0) {
+        new_value = val & mask;
+    } else {
+        new_value = val | mask;
+    }
+
+    printf("mask: %d, %u\n", mask, mask);
+    printf("pin->index: %d, %u\n", pin->index, pin->index);
+    printf("net_val: %d, %u\n", net_val, net_val);
+    printf("new_value: %d, %u\n", new_value, new_value);
     vpi::set_net_val(pin->net, new_value); // TODO: should we worry about sign?
 }
 
