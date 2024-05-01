@@ -3,7 +3,7 @@
 
 ## Virtual Board for VHDL code simulation
 
-This project aims to allow VHDL simulation on a "virtual board" (so a FPGA board won't be required), in a more friendly way (so you won't need to look at waveforms again!).
+Started in 2022, this project aims to allow VHDL simulation on a "virtual board" (so a FPGA board won't be required), in a more friendly way (so you won't need to look at waveforms again!).
 
 <img src="./assets/final_goal.drawio.png">
 
